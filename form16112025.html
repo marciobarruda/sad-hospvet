@@ -1,769 +1,447 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
+   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Secretaria de Administração - SAD — Seleção Simplificada Hospital Veterinário do Recife</title>
     <link
       rel="icon"
-      href="https://statics.recife.pe.gov.br/images/dynamics/conecta/icons/favicon.png?w=32&amp;h=32&amp;fit=fill&amp;border=2,transparent,shrink"
+      href="https://statics.recife.pe.gov.br/images/dynamics/conecta/icons/favicon.png?w=32&h=32&fit=fill&border=2,transparent,shrink"
     />
-    <title>Seleção Simplificada HVR</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
       :root {
-        --brand: #1a73e8;
-        --brand-dark: #1559b0;
-        --brand-light: #e8f0fe;
-        --surface: #ffffff;
-        --muted: #6c757d;
-        --border-soft: #dbe4ff;
+        --brand-primary: #0053a4;
+        --brand-secondary: #003a73;
+        --brand-highlight: #00a3ff;
+        --surface: #f4f7fb;
+        --surface-strong: #ffffff;
+        --border-color: #d0d7e2;
+        --text-strong: #1b263b;
+        --text-muted: #5b6c8c;
+      }
+
+      *, *::before, *::after {
+        box-sizing: border-box;
       }
 
       body {
+        font-family: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--surface);
+        color: var(--text-strong);
         min-height: 100vh;
-        margin: 0;
-        background:
-          radial-gradient(900px 480px at 10% -10%, #e9f1ff 0%, rgba(233, 241, 255, 0) 65%),
-          radial-gradient(900px 480px at 90% -20%, #f4f8ff 0%, rgba(244, 248, 255, 0) 70%),
-          linear-gradient(180deg, #f7f9fc 0%, #f1f4fb 100%);
-        color: #0b2447;
-        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
-      .pattern-top,
-      .pattern-bottom {
-        height: 140px;
-        background: url("https://statics.recife.pe.gov.br/images/dynamics/zonaazul/background.jpeg") center/1000px auto;
-        opacity: 0.25;
-      }
-
-      .frame-card {
-        max-width: 1100px;
-        margin: -120px auto 60px;
-        position: relative;
-        z-index: 2;
       }
 
       header.site-header {
-        position: relative;
-        background-color: #0b2447;
-        background-image: url("https://statics.recife.pe.gov.br/images/dynamics/automacao/header.png?w=3000");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        background: url("https://statics.recife.pe.gov.br/images/dynamics/automacao/header.png?w=3000")
+          center/cover no-repeat;
         color: #ffffff;
-        padding: 2.75rem 0 2.25rem;
-        box-shadow: 0 12px 32px rgba(17, 82, 173, 0.25);
-        overflow: hidden;
-      }
-
-      header.site-header::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, rgba(17, 82, 173, 0.72) 0%, rgba(11, 36, 71, 0.72) 100%);
-        z-index: 0;
-      }
-
-      .hero-container {
-        position: relative;
-        z-index: 1;
-        max-width: 1100px;
-        margin: 0 auto;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.65rem;
+        padding: 3.5rem 0 2.75rem;
       }
 
       header .lead {
         color: rgba(255, 255, 255, 0.82);
-        max-width: 720px;
-        margin: 0;
+        max-width: 100%;
+        font-size: 1rem;
+        line-height: 1.65;
+        text-align: justify;
       }
 
       .badge-open {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.4rem 1.05rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.18);
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        letter-spacing: 0.02em;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        background-color: rgba(255, 255, 255, 0.14);
       }
 
-      .site-header .display-6 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0;
-      }
- 
-      header.hero {
-        position: relative;
-        height: 240px;
-        overflow: hidden;
-        background-color: #0b2447;
-        background-image: url("https://statics.recife.pe.gov.br/images/dynamics/automacao/header.png?w=3000");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
-
-      header.hero::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(11, 36, 71, 0.55) 0%, rgba(11, 36, 71, 0.35) 70%, rgba(11, 36, 71, 0.15) 100%);
-      }
-
-      .hero-image {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        min-width: 100%;
-        min-height: 100%;
-        width: 100%;
-        height: 100%;
-        transform: translate(-50%, -50%);
-        object-fit: cover;
-      }
-
-      header.hero .hero-content {
-        position: relative;
-        z-index: 1;
-        color: #ffffff;
-        padding: 1.75rem 1.5rem;
+      .user-greeting {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(0, 83, 164, 0.09), rgba(0, 163, 255, 0.12));
+        color: var(--text-strong);
+        box-shadow: 0 10px 30px rgba(0, 45, 98, 0.08);
+      }
+
+      .user-greeting::before {
+        content: "👋";
+        font-size: 1.4rem;
+      }
+
+      .minhas-inscricoes-grid {
+        margin-top: 1rem;
+      }
+
+      .minhas-inscricao-card {
+        cursor: pointer;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        border: 1px solid rgba(0, 83, 164, 0.12);
+        border-radius: 4px;
+      }
+
+      .minhas-inscricao-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(0, 45, 98, 0.12);
+      }
+
+      .minhas-inscricao-card.is-loading {
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      .minhas-inscricoes-placeholder {
+        padding: 1.25rem;
+        border-radius: 4px;
+        background: rgba(0, 83, 164, 0.05);
+        border: 1px dashed rgba(0, 83, 164, 0.2);
+        color: var(--text-muted);
+      }
+
+      .resumo-inscricao-list dt {
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      .resumo-inscricao-list dd {
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+
+      .resumo-inscricao-pre {
+        background: rgba(0, 83, 164, 0.06);
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+        white-space: pre-wrap;
+        font-size: 0.85rem;
+        margin-bottom: 0;
+      }
+
+      .card {
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .rounded-4 {
+        border-radius: 4px !important;
+      }
+
+      .collapsible-form {
+        border: 1px solid rgba(0, 83, 164, 0.15);
+        border-radius: 4px;
+        background: rgba(0, 83, 164, 0.05);
+        padding: 1rem 1.25rem;
+      }
+
+      .collapsible-form summary {
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        list-style: none;
+      }
+
+      .collapsible-form summary::marker {
+        display: none;
+      }
+
+      .collapsible-form summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .collapsible-form summary::before {
+        content: "➕";
+        font-size: 0.9rem;
+        transition: transform 0.2s ease;
+      }
+
+      .collapsible-form[open] summary::before {
+        transform: rotate(45deg);
+      }
+
+      .collapsible-form .form-label {
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+
+      .collapsible-form .form-text {
+        color: var(--text-muted);
+      }
+
+      .feedback-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(27, 38, 59, 0.45);
+        display: none;
+        align-items: center;
         justify-content: center;
-        height: 320px;
+        padding: 1.5rem;
+        z-index: 1050;
+      }
+
+      .feedback-modal-backdrop.active {
+        display: flex;
+      }
+
+      .feedback-modal {
+        background: #ffffff;
+        border-radius: 1rem;
+        max-width: 420px;
         width: 100%;
-        max-width: 1100px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+        padding: 1.75rem;
         margin: 0 auto;
       }
 
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.35rem 0.85rem;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.18);
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-      } 
+      .feedback-modal.feedback-modal--wide {
+        max-width: 860px;
+      }
 
-      .hero-title {
-        font-size: 2rem;
+      .feedback-modal-title {
         font-weight: 700;
-        margin-top: 0.75rem;
-        margin-bottom: 0.35rem;
-      }
-
-      .hero-subtitle {
-        font-size: 1rem;
-        opacity: 0.86;
-      }
-
-      .wizard-shell {
-        background: var(--surface);
-        border-radius: 4px;
-        padding: 1.75rem 1.5rem;
-        box-shadow: 0 18px 40px rgba(26, 115, 232, 0.12), 0 8px 22px rgba(26, 115, 232, 0.08);
-        border: 1px solid rgba(26, 115, 232, 0.12);
-        margin-bottom: 1.75rem;
-      }
-
-      .wizard-header-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
-        margin-bottom: 1rem;
-      }
-
-      .wizard-heading {
-        font-size: 0.75rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #4c5aa1;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .registration-badge {
-        margin-left: auto;
-        display: inline-flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 0.6rem 1rem;
-        border-radius: 0.75rem;
-        background: rgba(26, 115, 232, 0.12);
-        color: #0b2447;
-        font-size: 0.85rem;
-        font-weight: 600;
-        min-width: 220px;
-      }
-
-      .registration-badge .registration-label {
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.1em;
-        color: #4c5aa1;
-        font-weight: 700;
-      }
-
-      .registration-badge .registration-value {
         font-size: 1.1rem;
-        font-weight: 700;
-        color: #0b2447;
-      }
-
-      .wizard-heading::before {
-        content: "";
-        display: inline-block;
-        width: 34px;
-        height: 2px;
-        border-radius: 999px;
-        background: rgba(26, 115, 232, 0.4);
-      }
-
-      .wizard-steps {
-        list-style: none;
-        padding: 1.25rem 0 0;
-        margin: 0;
-        display: flex;
-        gap: 0;
-        counter-reset: wizard-step;
-      }
-
-      .wizard-step {
-        flex: 1 1 0;
-        min-width: 0;
-        text-align: center;
-        position: relative;
-        padding: 0 1.25rem;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .wizard-step::before,
-      .wizard-step::after {
-        content: "";
-        position: absolute;
-        top: 22px;
-        height: 2px;
-        width: 50%;
-        background: rgba(26, 115, 232, 0.2);
-        z-index: -1;
-      }
-
-      .wizard-step::before {
-        left: 0;
-      }
-
-      .wizard-step::after {
-        left: 50%;
-      }
-
-      .wizard-step:first-child::before {
-        display: none;
-      }
-
-      .wizard-step:last-child::after {
-        display: none;
-      }
-
-      .wizard-index {
-        position: relative;
-        display: inline-flex;
-        width: 40px;
-        height: 40px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 999px;
-        background: #eef2ff;
-        color: #4c5aa1;
-        font-weight: 700;
-        z-index: 1;
-        border: 2px solid transparent;
-        transition: all 0.2s ease;
-        overflow: hidden;
-      }
-
-      .wizard-index-label {
-        position: relative;
-        z-index: 2;
-      }
-
-      .wizard-label {
-        font-weight: 600;
-        font-size: 0.92rem;
-        color: #4c5aa1;
-      }
-
-      .wizard-step.active .wizard-index {
-        background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
-        color: #ffffff;
-        border-color: rgba(26, 115, 232, 0.8);
-      }
-
-      .wizard-step.completed .wizard-index {
-        background: #198754;
-        color: #ffffff;
-        border-color: #198754;
-        box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.15);
-      }
-
-      .wizard-step.warning .wizard-index {
-        background: #facc15;
-        color: #7c2d12;
-        border-color: #fbbf24;
-        box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.25);
-      }
-
-      .wizard-step.active::before,
-      .wizard-step.active::after {
-        background: linear-gradient(90deg, var(--brand) 0%, var(--brand-dark) 100%);
-      }
-
-      .wizard-step.completed::before,
-      .wizard-step.completed::after {
-        background: linear-gradient(90deg, #198754 0%, #0f5132 100%);
-      }
-
-      .wizard-step.warning::before,
-      .wizard-step.warning::after {
-        background: linear-gradient(90deg, #facc15 0%, #f59e0b 100%);
-      }
-
-      .step-card {
-        border: 0;
-        border-radius: 4px;
-        overflow: hidden;
-        box-shadow: 0 20px 44px rgba(15, 23, 42, 0.08);
-        margin-bottom: 2.5rem;
-      }
-
-      .step-card .card-header {
-        background: linear-gradient(180deg, #ffffff 0%, #f5f7ff 100%);
-        border-bottom: 1px solid rgba(26, 115, 232, 0.12);
-        padding: 1.5rem;
-      }
-
-      .step-card .card-header h2 {
-        font-size: 1.1rem;
-        margin: 0;
-        font-weight: 700;
-      }
-
-      .step-card .card-body {
-        padding: 1.75rem;
-      }
-
-      .section-block {
-        margin-bottom: 2rem;
-      }
-
-      .section-block:last-child {
-        margin-bottom: 0;
-      }
-
-      .section-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #0b2447;
         margin-bottom: 0.75rem;
+        color: var(--text-strong);
       }
 
-      .section-subtitle {
-        color: var(--muted);
+      .feedback-modal-message {
         font-size: 0.95rem;
-        margin-bottom: 1rem;
-      }
-
-      .required::after {
-        content: " *";
-        color: #dc3545;
-        font-weight: 600;
-      }
-
-      .form-text {
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
-
-      .form-control.is-invalid,
-      .form-select.is-invalid {
-        border-color: #dc3545;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
-      }
-
-      .wizard-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 2rem;
-      }
-
-      .wizard-controls .spacer {
-        flex: 1;
-      }
-
-      .wizard-controls .btn {
-        min-width: 140px;
-        font-weight: 600;
-        padding: 0.65rem 1.5rem;
-      }
-
-      .wizard-controls .btn-outline-secondary {
-        color: #4c5aa1;
-        border-color: #c3cffb;
-      }
-
-      .wizard-controls .btn-outline-secondary:hover {
-        background: #e9eeff;
-        border-color: #9daef5;
-        color: #2a3a87;
-      }
-
-      .wizard-controls .btn-primary {
-        background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
-        border: none;
-        box-shadow: 0 10px 24px rgba(26, 115, 232, 0.25);
-      }
-
-      .wizard-controls .btn-primary:disabled {
-        opacity: 0.65;
-        box-shadow: none;
-      }
-
-      .summary-section {
-        border: 1px solid rgba(26, 115, 232, 0.08);
-        border-radius: 4px;
-        padding: 1.25rem 1.5rem;
-        margin-bottom: 1.25rem;
-        background: #ffffff;
-      }
-
-      .summary-section h3 {
-        font-size: 1rem;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-      }
-
-      .summary-table {
-        width: 100%;
-      }
-
-      .summary-table th {
-        width: 32%;
-        font-weight: 600;
-        color: #22315b;
-        padding: 0.35rem 0.5rem 0.35rem 0;
-      }
-
-      .summary-table td {
-        padding: 0.35rem 0;
-        color: #3f4d7a;
-      }
-
-      .summary-placeholder {
-        color: #94a3d3;
-        font-style: italic;
-      }
-
-      .dropzone {
-        border: 2px dashed rgba(26, 115, 232, 0.25);
-        border-radius: 4px;
-        padding: 1rem 1.25rem;
-        background: rgba(232, 240, 254, 0.55);
-        color: #34518a;
-      }
-
-      .upload-row {
-        --upload-min-height: 220px;
-      }
-
-      .upload-card {
-        border: 2px dashed rgba(17, 37, 82, 0.18);
-        border-radius: 4px;
-        background: rgba(255, 255, 255, 0.75);
-        padding: 1.5rem 1.25rem;
-        min-height: var(--upload-min-height);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 0.75rem;
-        position: relative;
-        transition: border-color 0.2s ease, background 0.2s ease;
-      }
-
-      .upload-card.required::after {
-        content: "Obrigatório";
-        position: absolute;
-        top: 0.75rem;
-        right: 0.9rem;
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: #c2410c;
-      }
-
-      .upload-card .upload-emoji {
-        font-size: 2.4rem;
-        line-height: 1;
-      }
-
-      .upload-card .upload-title {
-        font-weight: 700;
-        color: #132b63;
-      }
-
-      .upload-card .upload-instruction {
-        font-size: 0.85rem;
-        color: #5061a2;
-        margin-bottom: 0;
-      }
-
-      .upload-card .upload-input {
-        display: none;
-      }
-
-      .upload-card .upload-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.35rem;
-        padding: 0.45rem 1.35rem;
-        border-radius: 999px;
-        background: var(--brand);
-        color: #ffffff;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        text-decoration: none;
-      }
-
-      .upload-card .upload-button:hover,
-      .upload-card .upload-button:focus {
-        background: var(--brand-dark);
-        color: #ffffff;
-      }
-
-      .upload-card .upload-filename {
-        font-size: 0.8rem;
-        color: #1a73e8;
+        line-height: 1.6;
+        color: var(--text-strong);
+        max-height: 60vh;
+        overflow-y: auto;
+        overflow-x: hidden;
         word-break: break-word;
       }
 
-      .upload-card.has-file {
-        border-color: rgba(26, 115, 232, 0.65);
-        background: rgba(232, 240, 254, 0.45);
+      .feedback-modal-message > :last-child {
+        margin-bottom: 0;
       }
 
-      .hidden {
-        display: none !important;
+      .feedback-modal button {
+        border-radius: 999px;
+        padding-inline: 1.5rem;
+        font-weight: 600;
       }
 
-      .submission-success {
-        display: none;
-        margin: 0 auto 80px;
-        max-width: 720px;
-        text-align: center;
-        background: var(--surface);
-        border-radius: 4px;
-        padding: 3rem 2.5rem;
-        box-shadow: 0 18px 40px rgba(26, 115, 232, 0.12), 0 8px 22px rgba(26, 115, 232, 0.08);
-        border: 1px solid rgba(26, 115, 232, 0.12);
+      #publicacoes-list time {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--brand-secondary);
+        letter-spacing: 0.05em;
       }
 
-      .submission-success.show {
-        display: block;
-      }
-
-      .submission-success .success-icon {
-        font-size: 2.75rem;
-        margin-bottom: 1rem;
-      }
-
-      .submission-success .success-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-        color: #0b2447;
-      }
-
-      .submission-success .success-text {
-        color: #495057;
-        font-size: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      .submission-success .success-actions .btn {
-        min-width: 180px;
-      }
-
-      .submission-loading {
-        position: fixed;
-        inset: 0;
+      .section-title {
         display: flex;
         align-items: center;
-        justify-content: center;
-        background: rgba(11, 36, 71, 0.55);
-        backdrop-filter: blur(2px);
-        z-index: 1080;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.25s ease;
-        pointer-events: none;
+        gap: 0.65rem;
+        font-weight: 700;
+        font-size: 1.2rem;
+        letter-spacing: 0.02em;
+        color: var(--text-strong);
       }
 
-      .submission-loading.is-visible {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
+      .section-title::before {
+        content: "";
+        display: inline-block;
+        width: 32px;
+        height: 3px;
+        border-radius: 999px;
+        background: var(--brand-highlight);
       }
 
-      .submission-loading .loading-dialog {
-        background: rgba(11, 36, 71, 0.92);
-        color: #ffffff;
-        padding: 2.25rem 2.5rem;
+      .card-programa {
+        border: 1px solid rgba(0, 83, 164, 0.08);
         border-radius: 4px;
-        text-align: center;
-        box-shadow: 0 24px 48px rgba(11, 36, 71, 0.35);
-        max-width: 320px;
-        width: calc(100% - 48px);
+        background: var(--surface-strong);
+        box-shadow: 0 16px 34px rgba(0, 45, 98, 0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        height: 100%;
       }
 
-      .submission-loading .loading-text {
-        font-size: 1rem;
+      .card-programa:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 38px rgba(0, 45, 98, 0.12);
+      }
+
+      .card-programa .card-header {
+        border-bottom: 1px solid rgba(0, 83, 164, 0.08);
+        background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%);
+        padding: 1.5rem 1.6rem 1.1rem;
+        border-radius: 4px 4px 0 0;
+      }
+
+      .card-programa .card-body {
+        padding: 1.6rem 1.6rem 1.75rem;
+        border-radius: 0 0 4px 4px;
+      }
+
+      .card-programa .badge {
+        border-radius: 999px;
         font-weight: 600;
-        margin: 0;
+        letter-spacing: 0.04em;
       }
 
-      .submission-loading .spinner-border {
-        width: 3rem;
-        height: 3rem;
-        border-width: 0.35rem;
+      .card-programa ul {
+        padding-left: 1.25rem;
+        margin-bottom: 1.25rem;
+        color: var(--text-muted);
       }
 
-      .draft-toast {
-        position: fixed;
-        bottom: 32px;
-        right: 32px;
-        background: #0f5132;
-        color: #fff;
-        padding: 0.85rem 1.25rem;
+      .card-programa .btn {
+        border-radius: 999px;
+        padding-inline: 1.6rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .downloads-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+      }
+
+      .download-card {
+        border: 1px solid var(--border-color);
+        background: var(--surface-strong);
         border-radius: 4px;
-        box-shadow: 0 20px 45px rgba(15, 81, 50, 0.35);
-        display: none;
-        align-items: center;
+        padding: 1.35rem 1.4rem;
+        display: flex;
+        flex-direction: column;
         gap: 0.75rem;
-        z-index: 50;
+        min-height: 170px;
       }
 
-      .draft-toast.show {
+      .publicacoes-panel,
+      .updates-panel {
+        border-radius: 4px;
+      }
+
+      .download-card strong {
+        font-size: 1rem;
+        color: var(--text-strong);
+      }
+
+      .download-card p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      .download-card a {
+        font-weight: 600;
+      }
+
+      #publicacoes-list li + li {
+        margin-top: 0.75rem;
+      }
+
+      .publicacoes-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .publicacoes-item-link {
         display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
       }
 
-      @media (max-width: 992px) {
-        header.site-header {
-          padding: 2.3rem 0 1.75rem;
-        }
+      .publicacoes-item-icon {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        flex-shrink: 0;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
 
-        .site-header .display-6 {
-          font-size: 1.65rem;
+      .publicacoes-item-icon--pdf {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d32f2f' d='M6 2h7l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z'/%3E%3Cpath fill='%23ef5350' d='M13 2v5h5'/%3E%3Ctext x='12' y='17' text-anchor='middle' font-family='Arial, sans-serif' font-size='7' font-weight='700' fill='%23fff'%3EPDF%3C/text%3E%3C/svg%3E");
+      }
+
+      .publicacoes-item-icon--image {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3' y='4' width='18' height='16' rx='2' fill='%23215695'/%3E%3Crect x='4.5' y='5.5' width='15' height='13' rx='1.2' fill='%233968c8'/%3E%3Ccircle cx='9' cy='11' r='2.2' fill='%23fff59d'/%3E%3Cpath fill='%23c5cae9' d='M6 18l4.2-4.6 2.7 3.2 2.6-3L18 18z'/%3E%3C/svg%3E");
+      }
+
+      .publicacoes-item-icon--generic {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233f51b5' d='M7 2h7l5 5v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z'/%3E%3Cpath fill='%235c6bc0' d='M14 2v5h5'/%3E%3Crect x='8.5' y='12' width='7' height='1.5' rx='.75' fill='%23c5cae9'/%3E%3Crect x='8.5' y='15' width='5' height='1.5' rx='.75' fill='%23c5cae9'/%3E%3C/svg%3E");
+      }
+
+      .publicacoes-item time {
+        flex-shrink: 0;
+      }
+
+      @media (min-width: 576px) {
+        .publicacoes-item {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        .publicacoes-item-link {
+          align-items: flex-start;
+        }
+      }
+
+      .updates-panel {
+        border-left: 3px solid var(--brand-highlight);
+        padding-left: 1.2rem;
+        color: var(--text-muted);
+      }
+
+      .updates-panel time {
+        font-size: 0.85rem;
+        color: var(--brand-secondary);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      footer {
+        color: var(--text-muted);
+        padding: 2.5rem 0 2rem;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        header.site-header {
+          padding: 2.5rem 0 2rem;
         }
 
         .badge-open {
-          font-size: 0.8rem;
-          padding: 0.35rem 0.95rem;
-        }
-
-        header.hero {
-          height: 210px;
-        }
-
-        header.hero .hero-content {
-          padding: 1.5rem 1.1rem;
-          max-width: 100%;
-        }
-
-        .hero-container {
-          padding-left: 1.1rem;
-          padding-right: 1.1rem;
-          gap: 0.5rem;
-        }
-
-        .wizard-shell {
-          padding: 1.5rem 1.1rem;
-        }
-
-        .registration-badge {
           width: 100%;
-          align-items: flex-start;
+          justify-content: center;
         }
 
-        .wizard-steps {
-          overflow-x: auto;
-          gap: 1.25rem;
+        .section-title {
           justify-content: flex-start;
-          padding-bottom: 0.5rem;
-        }
-
-        .wizard-step {
-          min-width: 170px;
-          padding: 0 0.75rem;
-          align-items: flex-start;
-        }
-
-        .wizard-step::before,
-        .wizard-step::after {
-          display: none;
-        }
-      }
-
-      @media (max-width: 576px) {
-        .card-body {
-          padding: 1.5rem 1.25rem !important;
-        }
-
-        .wizard-controls {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .wizard-controls .btn {
-          width: 100%;
         }
       }
     </style>
   </head>
+
   <body>
     <header class="site-header">
       <div class="container hero-container">
@@ -1701,13 +1379,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🪪</div>
                     <p class="upload-title">Documento de identificação (frente)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_id_frente"
                       name="doc_id_frente"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Documento de identificação (frente)"
                     />
@@ -1719,13 +1397,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🪪</div>
                     <p class="upload-title">Documento de identificação (verso)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_id_verso"
                       name="doc_id_verso"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Documento de identificação (verso)"
                     />
@@ -1737,13 +1415,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🧾</div>
                     <p class="upload-title">CPF</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_cpf"
                       name="doc_cpf"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="CPF"
                     />
@@ -1755,13 +1433,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🏠</div>
                     <p class="upload-title">Comprovante de residência</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_residencia"
                       name="doc_residencia"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Comprovante de residência"
                     />
@@ -1773,13 +1451,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🗳️</div>
                     <p class="upload-title">Quitação eleitoral</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_quitacao_eleitoral"
                       name="doc_quitacao_eleitoral"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Quitação eleitoral"
                     />
@@ -1797,7 +1475,7 @@
                       class="upload-input"
                       id="doc_militar"
                       name="doc_militar"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       data-force-required="true"
                       aria-label="Quitação do serviço militar"
                     />
@@ -1821,7 +1499,7 @@
                       class="upload-input"
                       id="doc_jurado"
                       name="doc_jurado"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Certidão de atuação"
                     />
                     <label class="upload-button" for="doc_jurado">Selecionar arquivo</label>
@@ -1838,7 +1516,7 @@
                       class="upload-input"
                       id="doc_jurado_440"
                       name="doc_jurado_440"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Certidão (art. 440 do CPP)"
                     />
                     <label class="upload-button" for="doc_jurado_440">Selecionar arquivo</label>
@@ -1855,13 +1533,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🎓</div>
                     <p class="upload-title">Comprovação da escolaridade</p>
-                    <p class="upload-instruction">Envie em PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_escolaridade"
                       name="doc_escolaridade"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Comprovação da escolaridade"
                     />
@@ -1879,7 +1557,7 @@
                       class="upload-input"
                       id="doc_curriculo"
                       name="doc_curriculo"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       multiple
                       aria-label="Experiência, títulos ou certificados"
                     />
@@ -1903,7 +1581,7 @@
                       class="upload-input"
                       id="het_declaracao"
                       name="het_declaracao"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Declaração de heteroidentificação"
                     />
                     <label class="upload-button" for="het_declaracao">Selecionar arquivo</label>
@@ -1920,7 +1598,7 @@
                       class="upload-input"
                       id="het_id"
                       name="het_id"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       multiple
                       aria-label="Documento de identidade (frente/verso)"
                     />
@@ -1932,13 +1610,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🤳</div>
                     <p class="upload-title">Foto de frente</p>
-                    <p class="upload-instruction">Apenas imagens.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_frente"
                       name="het_frente"
-                      accept="image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Foto de frente"
                     />
                     <label class="upload-button" for="het_frente">Selecionar arquivo</label>
@@ -1949,13 +1627,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📸</div>
                     <p class="upload-title">Foto de perfil</p>
-                    <p class="upload-instruction">Apenas imagens.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_perfil"
                       name="het_perfil"
-                      accept="image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Foto de perfil"
                     />
                     <label class="upload-button" for="het_perfil">Selecionar arquivo</label>
@@ -1966,13 +1644,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🎥</div>
                     <p class="upload-title">Vídeo (até 20s)</p>
-                    <p class="upload-instruction">Formatos: MP4 ou Quicktime.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_video"
                       name="het_video"
-                      accept="video/mp4,video/quicktime"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Vídeo (até 20 segundos)"
                     />
                     <label class="upload-button" for="het_video">Selecionar arquivo</label>
@@ -1989,13 +1667,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🩺</div>
                     <p class="upload-title">Laudo médico</p>
-                    <p class="upload-instruction">Formatos: PDF, PNG ou JPG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="pcd_laudo"
                       name="pcd_laudo"
-                      accept=".pdf,.png,.jpeg,.jpg,.gif"
+                      accept=".pdf,.jpg,.jpeg"
                       data-force-required="true"
                       aria-label="Laudo médico"
                     />
@@ -2007,13 +1685,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📄</div>
                     <p class="upload-title">Declaração PCD (modelo do edital)</p>
-                    <p class="upload-instruction">Anexe em PDF ou imagem.</p>
+                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="pcd_declaracao"
                       name="pcd_declaracao"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       data-force-required="true"
                       aria-label="Declaração PCD (modelo do edital)"
                     />
@@ -2031,7 +1709,7 @@
                       class="upload-input"
                       id="pcd_exames"
                       name="pcd_exames"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       multiple
                       aria-label="Exames complementares"
                     />
