@@ -2169,9 +2169,11 @@
       const especialidadeSelect = document.getElementById('especialidade');
       const countdownStatus = document.getElementById('countdownStatus');
       const countdownTimer = document.getElementById('countdownTimer');
+      const submitButton = form?.querySelector('button[type="submit"]');
       const REGISTRATION_START = new Date('2025-11-17T00:00:00-03:00');
       const REGISTRATION_END = new Date('2025-11-26T23:59:59-03:00');
       let countdownInterval;
+      let hasSubmitted = false;
 
       const formatRemainingTime = (remainingMs) => {
         const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000));
@@ -2191,25 +2193,38 @@
         return parts.join(' ');
       };
 
+      const updateSubmissionAvailability = (now) => {
+        if (!submitButton || hasSubmitted) return;
+        const isOpen = now >= REGISTRATION_START && now <= REGISTRATION_END;
+        submitButton.disabled = !isOpen;
+        submitButton.ariaDisabled = (!isOpen).toString();
+        submitButton.title = isOpen
+          ? ''
+          : 'Envio disponível somente entre 17/11/2025 00:00 e 26/11/2025 23:59:59.';
+      };
+
       const updateCountdownTimer = () => {
         if (!countdownStatus || !countdownTimer) return;
 
         const now = new Date();
 
         if (now < REGISTRATION_START) {
-          countdownStatus.textContent = 'Inscrições abrem em:';
-          countdownTimer.textContent = formatRemainingTime(REGISTRATION_START - now);
+          countdownStatus.textContent = '⏳ Inscrições abrem em:';
+          countdownTimer.textContent = `🗓️ ${formatRemainingTime(REGISTRATION_START - now)}`;
+          updateSubmissionAvailability(now);
           return;
         }
 
         if (now <= REGISTRATION_END) {
-          countdownStatus.textContent = 'Tempo restante para encerramento das inscrições:';
-          countdownTimer.textContent = formatRemainingTime(REGISTRATION_END - now);
+          countdownStatus.textContent = '🚀 Inscrições abertas! Encerra em:';
+          countdownTimer.textContent = `⏱️ ${formatRemainingTime(REGISTRATION_END - now)}`;
+          updateSubmissionAvailability(now);
           return;
         }
 
-        countdownStatus.textContent = 'Período de inscrições encerrado.';
-        countdownTimer.textContent = '';
+        countdownStatus.textContent = '🔒 Período de inscrições encerrado.';
+        countdownTimer.textContent = '⏹️ Prazo finalizado';
+        updateSubmissionAvailability(now);
         if (countdownInterval) {
           clearInterval(countdownInterval);
         }
@@ -3771,10 +3786,10 @@
         } catch (error) {
           console.error('Erro ao enviar inscrição', error);
         }
-        const submitButton = form.querySelector('button[type="submit"]');
         if (submitButton) {
           submitButton.disabled = true;
         }
+        hasSubmitted = true;
         showSuccessFeedback();
       });
 
