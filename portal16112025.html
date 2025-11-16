@@ -487,8 +487,11 @@
                   <li>Envio de documentos comprobatórios em formato PDF.</li>
                   <li>Etapas conduzidas no Sistema SAD Seleções.</li>
                 </ul>
-                <div class="d-flex flex-wrap gap-2 mt-4">
-                  <button class="btn btn-primary px-4 py-2" id="btn-preencher-inscricao" type="button">Preencher formulário de inscrição</button>
+                <div class="mt-4 d-flex flex-column gap-2">
+                  <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary px-4 py-2" id="btn-preencher-inscricao" type="button">Preencher formulário de inscrição</button>
+                  </div>
+                  <p class="text-muted small mb-0" id="inscricao-btn-status"></p>
                 </div>
                 <div class="mt-4 pt-3 border-top">
                   <h4 class="h6 text-uppercase text-secondary mb-2">Interposição de recursos</h4>
@@ -735,6 +738,11 @@
         var authorizationField = document.getElementById("authorization");
         var targetUrl = "https://secti.recife.pe.gov.br/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
         var redirectUrl = "https://secti.recife.pe.gov.br/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
+        var inscricaoStatusText = document.getElementById("inscricao-btn-status");
+        var inscricaoJanelaInicioUtc = Date.UTC(2025, 10, 17, 3, 0, 0);
+        var inscricaoJanelaFimUtc = Date.UTC(2025, 10, 27, 2, 59, 59);
+        var inscricaoJanelaInicioLabel = "17/11/2025 às 00h00";
+        var inscricaoJanelaFimLabel = "26/11/2025 às 23h59";
         var updateButton = document.getElementById("btn-atualizar-cadastro");
         var emailInput = document.getElementById("email-input");
         var emailConfirmInput = document.getElementById("email-confirm-input");
@@ -782,6 +790,58 @@
         var inscricoesResumoEndpoint = "https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/consultar-sesuite";
         var minhasInscricoesEmptyDefault = minhasInscricoesEmpty ? minhasInscricoesEmpty.textContent.trim() : "";
         var minhasInscricoesLoadingDefault = minhasInscricoesLoading ? minhasInscricoesLoading.textContent.trim() : "";
+
+        function isInscricaoWindowOpen(nowValue) {
+          var current = typeof nowValue === "number" ? nowValue : Date.now();
+          return current >= inscricaoJanelaInicioUtc && current <= inscricaoJanelaFimUtc;
+        }
+
+        function updateInscricaoButtonState() {
+          var nowUtc = Date.now();
+          var estaAberta = isInscricaoWindowOpen(nowUtc);
+
+          if (button) {
+            button.disabled = !estaAberta;
+            button.setAttribute("aria-disabled", estaAberta ? "false" : "true");
+            button.classList.toggle("disabled", !estaAberta);
+            if (!estaAberta) {
+              button.title = "O período de preenchimento do formulário está indisponível.";
+            } else {
+              button.removeAttribute("title");
+            }
+          }
+
+          if (inscricaoStatusText) {
+            var textoBase =
+              "O formulário de inscrição fica disponível de " +
+              inscricaoJanelaInicioLabel +
+              " até " +
+              inscricaoJanelaFimLabel +
+              " (horário do Recife).";
+            if (estaAberta) {
+              inscricaoStatusText.textContent =
+                "O preenchimento está disponível até " + inscricaoJanelaFimLabel + " (horário do Recife).";
+              inscricaoStatusText.classList.remove("text-danger");
+            } else if (nowUtc < inscricaoJanelaInicioUtc) {
+              inscricaoStatusText.textContent =
+                "O preenchimento estará disponível a partir de " + inscricaoJanelaInicioLabel + " (horário do Recife).";
+              inscricaoStatusText.classList.remove("text-danger");
+            } else {
+              inscricaoStatusText.textContent =
+                "O período para preencher o formulário foi encerrado em " + inscricaoJanelaFimLabel + " (horário do Recife).";
+              inscricaoStatusText.classList.add("text-danger");
+            }
+
+            if (!inscricaoStatusText.textContent) {
+              inscricaoStatusText.textContent = textoBase;
+            }
+          }
+        }
+
+        if (button || inscricaoStatusText) {
+          updateInscricaoButtonState();
+          setInterval(updateInscricaoButtonState, 60 * 1000);
+        }
         function getPublicationIcon(mimeType, extension, url) {
           var normalizedExtension = "";
           var normalizedMime = "";
@@ -2086,7 +2146,20 @@
           });
 
         if (button) {
-          button.addEventListener("click", function () {
+          button.addEventListener("click", function (event) {
+            if (!isInscricaoWindowOpen()) {
+              event.preventDefault();
+              showPopup(
+                "O preenchimento do formulário de inscrição está disponível apenas entre " +
+                  inscricaoJanelaInicioLabel +
+                  " e " +
+                  inscricaoJanelaFimLabel +
+                  " (horário do Recife).",
+                { tone: "warning", appendReminder: false }
+              );
+              return;
+            }
+
             var authorization = authorizationField ? authorizationField.value : "";
 
             fetch(targetUrl, {
