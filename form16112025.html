@@ -90,6 +90,19 @@
         margin: 0;
       }
 
+      .countdown-status {
+        display: block;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .countdown-timer {
+        display: block;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        margin-top: 0.1rem;
+      }
+
       .badge-open {
         display: inline-flex;
         align-items: center;
@@ -767,8 +780,9 @@
       <div class="container hero-container">
         <span class="badge-open">Secretaria de Administração - SAD - Prefeitura do Recife</span>
         <h1 class="display-6 fw-semibold mt-3">Seleção Simplificada Hospital Veterinário do Recife</h1>
-        <p class="lead mt-2">
-          Inscrições abertas até 23:59:59 do dia 31 de outubro de 2025
+        <p class="lead mt-2" id="countdownContainer" aria-live="polite">
+          <span id="countdownStatus" class="countdown-status">Período de inscrição</span>
+          <span id="countdownTimer" class="countdown-timer">Carregando contagem regressiva...</span>
         </p>
       </div>
     </header>
@@ -2153,6 +2167,53 @@
       const cargosInscritosInput = document.getElementById('cargosInscritos');
       const especialidadeGroup = document.getElementById('especialidadeGroup');
       const especialidadeSelect = document.getElementById('especialidade');
+      const countdownStatus = document.getElementById('countdownStatus');
+      const countdownTimer = document.getElementById('countdownTimer');
+      const REGISTRATION_START = new Date('2025-11-17T00:00:00-03:00');
+      const REGISTRATION_END = new Date('2025-11-26T23:59:59-03:00');
+      let countdownInterval;
+
+      const formatRemainingTime = (remainingMs) => {
+        const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000));
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const parts = [];
+        if (days > 0) {
+          parts.push(`${days}d`);
+        }
+        parts.push(hours.toString().padStart(2, '0') + 'h');
+        parts.push(minutes.toString().padStart(2, '0') + 'm');
+        parts.push(seconds.toString().padStart(2, '0') + 's');
+
+        return parts.join(' ');
+      };
+
+      const updateCountdownTimer = () => {
+        if (!countdownStatus || !countdownTimer) return;
+
+        const now = new Date();
+
+        if (now < REGISTRATION_START) {
+          countdownStatus.textContent = 'Inscrições abrem em:';
+          countdownTimer.textContent = formatRemainingTime(REGISTRATION_START - now);
+          return;
+        }
+
+        if (now <= REGISTRATION_END) {
+          countdownStatus.textContent = 'Tempo restante para encerramento das inscrições:';
+          countdownTimer.textContent = formatRemainingTime(REGISTRATION_END - now);
+          return;
+        }
+
+        countdownStatus.textContent = 'Período de inscrições encerrado.';
+        countdownTimer.textContent = '';
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+        }
+      };
       const especialidadeEntries = [
         {
           cargo: 'Analista em Saúde Animal – Veterinário 40h',
@@ -3780,7 +3841,9 @@
       updateNacionalidadeRequirement();
       handleCepInput();
       validateEmailsMatch();
+      updateCountdownTimer();
+      countdownInterval = setInterval(updateCountdownTimer, 1000);
       showStep(0);
-    </script>   
+    </script>
   </body>
 </html>
