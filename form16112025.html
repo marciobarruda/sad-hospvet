@@ -2094,7 +2094,15 @@
             <div class="wizard-controls">
               <button type="button" class="btn btn-outline-secondary" data-action="prev">Voltar</button>
               <div class="spacer"></div>
-              <button type="submit" class="btn btn-primary">Enviar inscrição</button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                aria-disabled="true"
+                disabled
+                title="Envio disponível somente entre 17/11/2025 00:00 e 26/11/2025 23:59:59."
+              >
+                Enviar inscrição
+              </button>
             </div>
           </div>
         </section>
@@ -2228,6 +2236,11 @@
         if (countdownInterval) {
           clearInterval(countdownInterval);
         }
+      };
+
+      const startCountdown = () => {
+        updateCountdownTimer();
+        countdownInterval = window.setInterval(updateCountdownTimer, 1000);
       };
       const especialidadeEntries = [
         {
@@ -3796,69 +3809,89 @@
       if (nivelSelect) {
         nivelSelect.addEventListener('change', filterCargoOptions);
       }
-      if (cargoSelect) {
-        cargoSelect.addEventListener('change', updateEspecialidadeOptions);
-      }
-      if (especialidadeSelect) {
-        especialidadeSelect.addEventListener('change', () => {
-          especialidadeSelect.dataset.currentValue = especialidadeSelect.value || '';
-        });
-      }
-      document.getElementById('genero').addEventListener('change', updateGeneroOutro);
-      document.getElementById('sexo').addEventListener('change', updateMilitar);
-      document.querySelectorAll('input[name="jurado_funcao"]').forEach((input) => input.addEventListener('change', updateJurado));
-      document.querySelectorAll('input[name="vinculo_publico_opcao"]').forEach((input) => input.addEventListener('change', updateVinculo));
-      document.getElementById('is_pcd').addEventListener('change', updatePCD);
-      document.querySelectorAll('input[name="condicao_especial"]').forEach((input) => input.addEventListener('change', updateNecessidade));
-      document.getElementById('cotasPPNI').addEventListener('change', updatePPNI);
-      document.getElementById('email').addEventListener('input', validateEmailsMatch);
-      document.getElementById('email_confirm').addEventListener('input', validateEmailsMatch);
-      document.getElementById('email').addEventListener('blur', () => {
-        if (document.getElementById('email_confirm')?.value) {
-          validateEmailsMatch(true);
-        }
-      });
-      document.getElementById('email_confirm').addEventListener('blur', () => validateEmailsMatch(true));
-      if (nacionalidadeSelect) {
-        nacionalidadeSelect.addEventListener('change', updateNacionalidadeRequirement);
-      }
-      if (newSubmissionButton) {
-        newSubmissionButton.addEventListener('click', () => window.location.reload());
-      }
-      document.querySelectorAll('.upload-input').forEach((input) => {
-        updateUploadIndicator(input);
-        input.addEventListener('change', () => updateUploadIndicator(input));
-      });
-      if (cepInput) {
-        cepInput.addEventListener('input', handleCepInput);
-      }
+      startCountdown();
 
-      applyLowercaseToEmails();
-      applyUppercaseTransform();
-      enforceNumericOnly();
-      populateUfSelects();
-      filterCargoOptions();
-      updateEspecialidadeOptions();
-      selectPrefills();
-      void populateNacionalidades();
-      radioPrefills();
-      loadDraft();
-      updateEspecialidadeOptions();
-      updateGeneroOptions();
-      updateGeneroOutro();
-      updateMilitar();
-      updateJurado();
-      updateVinculo();
-      updatePCD();
-      requestAnimationFrame(() => updatePCD());
-      updateNecessidade();
-      updatePPNI();
-      updateNacionalidadeRequirement();
-      handleCepInput();
-      validateEmailsMatch();
-      updateCountdownTimer();
-      countdownInterval = setInterval(updateCountdownTimer, 1000);
-      showStep(0);
+      try {
+        if (cargoSelect) {
+          cargoSelect.addEventListener('change', updateEspecialidadeOptions);
+        }
+        if (especialidadeSelect) {
+          especialidadeSelect.addEventListener('change', () => {
+            especialidadeSelect.dataset.currentValue = especialidadeSelect.value || '';
+          });
+        }
+        const generoInput = document.getElementById('genero');
+        const sexoInput = document.getElementById('sexo');
+        const pcdInput = document.getElementById('is_pcd');
+        if (generoInput) generoInput.addEventListener('change', updateGeneroOutro);
+        if (sexoInput) sexoInput.addEventListener('change', updateMilitar);
+        if (pcdInput) pcdInput.addEventListener('change', updatePCD);
+        document
+          .querySelectorAll('input[name="jurado_funcao"]')
+          .forEach((input) => input.addEventListener('change', updateJurado));
+        document
+          .querySelectorAll('input[name="vinculo_publico_opcao"]')
+          .forEach((input) => input.addEventListener('change', updateVinculo));
+        document
+          .querySelectorAll('input[name="condicao_especial"]')
+          .forEach((input) => input.addEventListener('change', updateNecessidade));
+        const cotasSelect = document.getElementById('cotasPPNI');
+        if (cotasSelect) cotasSelect.addEventListener('change', updatePPNI);
+        const emailInput = document.getElementById('email');
+        const emailConfirmInput = document.getElementById('email_confirm');
+        if (emailInput) emailInput.addEventListener('input', validateEmailsMatch);
+        if (emailConfirmInput) emailConfirmInput.addEventListener('input', validateEmailsMatch);
+        if (emailInput) {
+          emailInput.addEventListener('blur', () => {
+            if (emailConfirmInput?.value) {
+              validateEmailsMatch(true);
+            }
+          });
+        }
+        if (emailConfirmInput) {
+          emailConfirmInput.addEventListener('blur', () => validateEmailsMatch(true));
+        }
+        if (nacionalidadeSelect) {
+          nacionalidadeSelect.addEventListener('change', updateNacionalidadeRequirement);
+        }
+        if (newSubmissionButton) {
+          newSubmissionButton.addEventListener('click', () => window.location.reload());
+        }
+        document.querySelectorAll('.upload-input').forEach((input) => {
+          updateUploadIndicator(input);
+          input.addEventListener('change', () => updateUploadIndicator(input));
+        });
+        if (cepInput) {
+          cepInput.addEventListener('input', handleCepInput);
+        }
+
+        applyLowercaseToEmails();
+        applyUppercaseTransform();
+        enforceNumericOnly();
+        populateUfSelects();
+        filterCargoOptions();
+        updateEspecialidadeOptions();
+        selectPrefills();
+        void populateNacionalidades();
+        radioPrefills();
+        loadDraft();
+        updateEspecialidadeOptions();
+        updateGeneroOptions();
+        updateGeneroOutro();
+        updateMilitar();
+        updateJurado();
+        updateVinculo();
+        updatePCD();
+        requestAnimationFrame(() => updatePCD());
+        updateNecessidade();
+        updatePPNI();
+        updateNacionalidadeRequirement();
+        handleCepInput();
+        validateEmailsMatch();
+        showStep(0);
+      } catch (error) {
+        console.error('Erro ao inicializar o formulário', error);
+      }
     </script>
   </body>
 </html>
