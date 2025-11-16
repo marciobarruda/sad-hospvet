@@ -507,18 +507,18 @@
                     </div>
                     <div class="mt-3">
                       <label class="form-label" for="recurso-arquivo-curricular">Recurso sobre análise curricular</label>
-                      <input class="form-control" type="file" id="recurso-arquivo-curricular" name="arquivoRecursoCurricular" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.odt" data-tipo="analiseCurricular" data-legenda="Recurso sobre análise curricular" />
-                      <div class="form-text">Anexe o documento referente à etapa de análise curricular (até 10&nbsp;MB).</div>
+                      <input class="form-control" type="file" id="recurso-arquivo-curricular" name="arquivoRecursoCurricular" accept=".pdf,.jpg,.jpeg" data-tipo="analiseCurricular" data-legenda="Recurso sobre análise curricular" />
+                      <div class="form-text">Anexe o documento referente à etapa de análise curricular (formatos PDF, JPG ou JPEG, até 10&nbsp;MB).</div>
                     </div>
                     <div class="mt-3">
                       <label class="form-label" for="recurso-arquivo-laudo">Recurso de Laudo Médico para Pessoas com Deficiência</label>
-                      <input class="form-control" type="file" id="recurso-arquivo-laudo" name="arquivoRecursoLaudo" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.odt" data-tipo="laudoMedicoPcd" data-legenda="Recurso de Laudo Médico para Pessoas com Deficiência" />
-                      <div class="form-text">Utilize este campo para anexar o laudo médico PcD (até 10&nbsp;MB).</div>
+                      <input class="form-control" type="file" id="recurso-arquivo-laudo" name="arquivoRecursoLaudo" accept=".pdf,.jpg,.jpeg" data-tipo="laudoMedicoPcd" data-legenda="Recurso de Laudo Médico para Pessoas com Deficiência" />
+                      <div class="form-text">Utilize este campo para anexar o laudo médico PcD (formatos PDF, JPG ou JPEG, até 10&nbsp;MB).</div>
                     </div>
                     <div class="mt-3">
                       <label class="form-label" for="recurso-arquivo-autodeclaracao">Recurso de Autodeclaração — Candidatos Negros</label>
-                      <input class="form-control" type="file" id="recurso-arquivo-autodeclaracao" name="arquivoRecursoAutodeclaracao" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.odt" data-tipo="autodeclaracaoNegros" data-legenda="Recurso de Autodeclaração — Candidatos Negros" />
-                      <div class="form-text">Anexe o documento de autodeclaração para candidatos negros (até 10&nbsp;MB).</div>
+                      <input class="form-control" type="file" id="recurso-arquivo-autodeclaracao" name="arquivoRecursoAutodeclaracao" accept=".pdf,.jpg,.jpeg" data-tipo="autodeclaracaoNegros" data-legenda="Recurso de Autodeclaração — Candidatos Negros" />
+                      <div class="form-text">Anexe o documento de autodeclaração para candidatos negros (formatos PDF, JPG ou JPEG, até 10&nbsp;MB).</div>
                     </div>
                     <div class="mt-3 text-muted small">Selecione apenas os arquivos necessários para o seu recurso. Pelo menos um anexo deve ser informado.</div>
                   </details>
@@ -772,6 +772,8 @@
         ];
         var recursoEndpoint = recursoButton ? recursoButton.getAttribute("data-endpoint") : "";
         var recursoMaxFileSize = 10 * 1024 * 1024;
+        var recursoMimeTypesPermitidos = ["application/pdf", "image/jpeg", "image/pjpeg"];
+        var recursoExtensoesPermitidas = [".pdf", ".jpg", ".jpeg"];
         var recursoPrefix = "SSHVR2025";
         var recursoDigits = 6;
         var recursoPattern = /^SSHVR2025\d{6}$/;
@@ -1717,6 +1719,32 @@
           return messages;
         }
 
+        function obterExtensaoArquivo(nomeArquivo) {
+          if (!nomeArquivo || typeof nomeArquivo !== "string") {
+            return "";
+          }
+          var lastDot = nomeArquivo.lastIndexOf(".");
+          if (lastDot === -1) {
+            return "";
+          }
+          return nomeArquivo.slice(lastDot).toLowerCase();
+        }
+
+        function arquivoTemTipoPermitido(file) {
+          if (!file) {
+            return false;
+          }
+          var mime = (file.type || "").toLowerCase();
+          if (mime && recursoMimeTypesPermitidos.indexOf(mime) !== -1) {
+            return true;
+          }
+          var extensao = obterExtensaoArquivo(file.name || "");
+          if (extensao && recursoExtensoesPermitidas.indexOf(extensao) !== -1) {
+            return true;
+          }
+          return false;
+        }
+
         function collectResourceValues() {
           var numero = "";
           if (recursoNumeroInput) {
@@ -1727,15 +1755,21 @@
           }
 
           var numeroValido = recursoPattern.test(numero);
+          var arquivosInvalidos = [];
           var arquivosSelecionados = recursoArquivoInputs
             .map(function (entry) {
               if (!entry.input || !entry.input.files || !entry.input.files[0]) {
                 return null;
               }
+              var arquivo = entry.input.files[0];
+              if (!arquivoTemTipoPermitido(arquivo)) {
+                arquivosInvalidos.push({ input: entry.input, tipo: entry.tipo, file: arquivo });
+                return null;
+              }
               return {
                 input: entry.input,
                 tipo: entry.tipo,
-                file: entry.input.files[0],
+                file: arquivo,
               };
             })
             .filter(function (item) {
@@ -1746,14 +1780,16 @@
             numero: numero,
             numeroValido: numeroValido,
             arquivos: arquivosSelecionados,
-            pronto: numeroValido && arquivosSelecionados.length > 0,
+            arquivosInvalidos: arquivosInvalidos,
+            pronto: numeroValido && arquivosSelecionados.length > 0 && arquivosInvalidos.length === 0,
           };
         }
 
         function atualizarFeedbackRecurso(forceHighlight) {
           var state = collectResourceValues();
           var highlightNumero = forceHighlight || (recursoNumeroInput && recursoNumeroInput.dataset.touched === "true");
-          var algumArquivoSelecionado = state.arquivos.length > 0;
+          var algumArquivoSelecionado =
+            state.arquivos.length > 0 || (state.arquivosInvalidos && state.arquivosInvalidos.length > 0);
 
           if (recursoNumeroInput) {
             recursoNumeroInput.classList.toggle("is-invalid", highlightNumero && !state.numeroValido);
@@ -1766,7 +1802,11 @@
             var input = entry.input;
             var touched = forceHighlight || input.dataset.touched === "true";
             var possuiArquivo = input.files && input.files[0];
-            input.classList.toggle("is-invalid", touched && !possuiArquivo && !algumArquivoSelecionado);
+            var arquivoInvalido = (state.arquivosInvalidos || []).some(function (item) {
+              return item.input === input;
+            });
+            var deveDestacar = touched && ((!possuiArquivo && !algumArquivoSelecionado) || arquivoInvalido);
+            input.classList.toggle("is-invalid", deveDestacar);
           });
 
           if (recursoButton) {
@@ -1943,6 +1983,15 @@
           }
           entry.input.addEventListener("change", function () {
             entry.input.dataset.touched = "true";
+            var arquivoSelecionado = entry.input.files && entry.input.files[0];
+            if (arquivoSelecionado && !arquivoTemTipoPermitido(arquivoSelecionado)) {
+              entry.input.value = "";
+              entry.input.classList.add("is-invalid");
+              showPopup("Selecione apenas arquivos nos formatos PDF, JPG ou JPEG.", {
+                tone: "warning",
+                appendReminder: false,
+              });
+            }
             atualizarFeedbackRecurso(false);
           });
           entry.input.addEventListener("blur", function () {
@@ -2291,6 +2340,9 @@
               }
               if (state.arquivos.length === 0) {
                 erros.push("Selecione ao menos um arquivo de recurso para prosseguir.");
+              }
+              if (state.arquivosInvalidos && state.arquivosInvalidos.length > 0) {
+                erros.push("Envie apenas arquivos nos formatos PDF, JPG ou JPEG.");
               }
               showPopup(erros.join(" "), { tone: "warning", data: { status: "warning" } });
               return;
