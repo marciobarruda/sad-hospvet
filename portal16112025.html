@@ -489,7 +489,14 @@
                 </ul>
                 <div class="mt-4 d-flex flex-column gap-2">
                   <div class="d-flex flex-wrap gap-2">
-                    <button class="btn btn-primary px-4 py-2" id="btn-preencher-inscricao" type="button">Preencher formulário de inscrição</button>
+                    <button
+                      class="btn btn-primary px-4 py-2"
+                      id="btn-preencher-inscricao"
+                      type="button"
+                      data-endpoint="https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/47e510d9-7e40-4191-a7b9-8993e2a05eb7"
+                    >
+                      Preencher formulário de inscrição
+                    </button>
                   </div>
                   <p class="text-muted small mb-0" id="inscricao-btn-status"></p>
                 </div>
@@ -736,8 +743,9 @@
       document.addEventListener("DOMContentLoaded", function () {
         var button = document.getElementById("btn-preencher-inscricao");
         var authorizationField = document.getElementById("authorization");
-        var targetUrl = "https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
-        var redirectUrl = "https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
+        var endpointDefault = "https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
+        var targetUrl = button && button.getAttribute("data-endpoint") ? button.getAttribute("data-endpoint") : endpointDefault;
+        var redirectUrl = targetUrl;
         var inscricaoStatusText = document.getElementById("inscricao-btn-status");
         var inscricaoJanelaInicioUtc = Date.UTC(2025, 10, 17, 3, 0, 0);
         var inscricaoJanelaFimUtc = Date.UTC(2025, 10, 27, 2, 59, 59);
