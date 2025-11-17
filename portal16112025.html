@@ -745,10 +745,6 @@
         var authorizationField = document.getElementById("authorization");
         var endpointDefault = "https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
         var inscricaoStatusText = document.getElementById("inscricao-btn-status");
-        var inscricaoJanelaInicioUtc = Date.UTC(2025, 10, 17, 3, 0, 0);
-        var inscricaoJanelaFimUtc = Date.UTC(2025, 10, 27, 2, 59, 59);
-        var inscricaoJanelaInicioLabel = "17/11/2025 às 00h00";
-        var inscricaoJanelaFimLabel = "26/11/2025 às 23h59";
         var updateButton = document.getElementById("btn-atualizar-cadastro");
         var emailInput = document.getElementById("email-input");
         var emailConfirmInput = document.getElementById("email-confirm-input");
@@ -799,56 +795,9 @@
         var minhasInscricoesEmptyDefault = minhasInscricoesEmpty ? minhasInscricoesEmpty.textContent.trim() : "";
         var minhasInscricoesLoadingDefault = minhasInscricoesLoading ? minhasInscricoesLoading.textContent.trim() : "";
 
-        function isInscricaoWindowOpen(nowValue) {
-          var current = typeof nowValue === "number" ? nowValue : Date.now();
-          return current >= inscricaoJanelaInicioUtc && current <= inscricaoJanelaFimUtc;
-        }
-
-        function updateInscricaoButtonState() {
-          var nowUtc = Date.now();
-          var estaAberta = isInscricaoWindowOpen(nowUtc);
-
-          if (button) {
-            button.disabled = !estaAberta;
-            button.setAttribute("aria-disabled", estaAberta ? "false" : "true");
-            button.classList.toggle("disabled", !estaAberta);
-            if (!estaAberta) {
-              button.title = "O período de preenchimento do formulário está indisponível.";
-            } else {
-              button.removeAttribute("title");
-            }
-          }
-
-          if (inscricaoStatusText) {
-            var textoBase =
-              "O formulário de inscrição fica disponível de " +
-              inscricaoJanelaInicioLabel +
-              " até " +
-              inscricaoJanelaFimLabel +
-              " (horário do Recife).";
-            if (estaAberta) {
-              inscricaoStatusText.textContent =
-                "O preenchimento está disponível até " + inscricaoJanelaFimLabel + " (horário do Recife).";
-              inscricaoStatusText.classList.remove("text-danger");
-            } else if (nowUtc < inscricaoJanelaInicioUtc) {
-              inscricaoStatusText.textContent =
-                "O preenchimento estará disponível a partir de " + inscricaoJanelaInicioLabel + " (horário do Recife).";
-              inscricaoStatusText.classList.remove("text-danger");
-            } else {
-              inscricaoStatusText.textContent =
-                "O período para preencher o formulário foi encerrado em " + inscricaoJanelaFimLabel + " (horário do Recife).";
-              inscricaoStatusText.classList.add("text-danger");
-            }
-
-            if (!inscricaoStatusText.textContent) {
-              inscricaoStatusText.textContent = textoBase;
-            }
-          }
-        }
-
-        if (button || inscricaoStatusText) {
-          updateInscricaoButtonState();
-          setInterval(updateInscricaoButtonState, 60 * 1000);
+        if (inscricaoStatusText) {
+          inscricaoStatusText.textContent = "O formulário de inscrição está disponível para preenchimento.";
+          inscricaoStatusText.classList.remove("text-danger");
         }
         function getPublicationIcon(mimeType, extension, url) {
           var normalizedExtension = "";
@@ -2243,19 +2192,6 @@
 
         if (button) {
           button.addEventListener("click", function (event) {
-            if (!isInscricaoWindowOpen()) {
-              event.preventDefault();
-              showPopup(
-                "O preenchimento do formulário de inscrição está disponível apenas entre " +
-                  inscricaoJanelaInicioLabel +
-                  " e " +
-                  inscricaoJanelaFimLabel +
-                  " (horário do Recife).",
-                { tone: "warning", appendReminder: false }
-              );
-              return;
-            }
-
             var authorization = authorizationField ? authorizationField.value : "";
             var endpoint = getInscricaoEndpoint();
 
