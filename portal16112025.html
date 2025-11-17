@@ -2211,6 +2211,10 @@
 
             var authorization = authorizationField ? authorizationField.value : "";
 
+            if (authorization) {
+              document.cookie = "token=" + encodeURIComponent(authorization) + "; path=/";
+            }
+
             fetch(targetUrl, {
               method: "POST",
               headers: {
