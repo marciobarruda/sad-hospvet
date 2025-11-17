@@ -2707,6 +2707,8 @@
             if (!group.length) return;
             const hasVisibleOption = group.some((radio) => ignoreVisibility || isElementVisible(radio));
             if (!hasVisibleOption) return;
+            const isRequiredGroup = group.some((radio) => radio.required);
+            if (!isRequiredGroup) return;
             const hasSelection = group.some((radio) => radio.checked);
             if (!hasSelection) {
               const representative = group.find((radio) => ignoreVisibility || isElementVisible(radio)) || field;
