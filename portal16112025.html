@@ -744,8 +744,6 @@
         var button = document.getElementById("btn-preencher-inscricao");
         var authorizationField = document.getElementById("authorization");
         var endpointDefault = "https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/47e510d9-7e40-4191-a7b9-8993e2a05eb7";
-        var targetUrl = button && button.getAttribute("data-endpoint") ? button.getAttribute("data-endpoint") : endpointDefault;
-        var redirectUrl = targetUrl;
         var inscricaoStatusText = document.getElementById("inscricao-btn-status");
         var inscricaoJanelaInicioUtc = Date.UTC(2025, 10, 17, 3, 0, 0);
         var inscricaoJanelaFimUtc = Date.UTC(2025, 10, 27, 2, 59, 59);
@@ -2202,6 +2200,47 @@
             }
           });
 
+        function getInscricaoEndpoint() {
+          if (!button) {
+            return "";
+          }
+
+          var endpoint = button.getAttribute("data-endpoint") || "";
+          endpoint = endpoint.trim();
+
+          if (endpoint) {
+            return endpoint;
+          }
+
+          return endpointDefault;
+        }
+
+        function submitInscricaoForm(authorization, endpoint) {
+          var formId = "inscricao-redirect-form";
+          var existingForm = document.getElementById(formId);
+          var form = existingForm || document.createElement("form");
+
+          form.id = formId;
+          form.method = "POST";
+          form.action = endpoint;
+          form.style.display = "none";
+
+          form.innerHTML = "";
+
+          var authInput = document.createElement("input");
+          authInput.type = "hidden";
+          authInput.name = "authorization";
+          authInput.value = authorization || "";
+
+          form.appendChild(authInput);
+
+          if (!existingForm) {
+            document.body.appendChild(form);
+          }
+
+          form.submit();
+        }
+
         if (button) {
           button.addEventListener("click", function (event) {
             if (!isInscricaoWindowOpen()) {
@@ -2218,24 +2257,18 @@
             }
 
             var authorization = authorizationField ? authorizationField.value : "";
+            var endpoint = getInscricaoEndpoint();
+
+            if (!endpoint) {
+              showPopup("Não foi possível identificar o endereço do formulário de inscrição.", { tone: "error" });
+              return;
+            }
 
             if (authorization) {
               document.cookie = "token=" + encodeURIComponent(authorization) + "; path=/";
             }
 
-            fetch(targetUrl, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ authorization: authorization }),
-            })
-              .catch(function (error) {
-                console.error("Falha ao enviar autorização:", error);
-              })
-              .finally(function () {
-                window.location.href = redirectUrl;
-              });
+            submitInscricaoForm(authorization, endpoint);
           });
         }
 
