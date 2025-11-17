@@ -2164,6 +2164,25 @@
           return endpointDefault;
         }
 
+        function appendAuthorizationParam(endpoint, authorization) {
+          if (!endpoint || !authorization) {
+            return endpoint;
+          }
+
+          try {
+            var url = new URL(endpoint);
+            url.searchParams.set("authorization", authorization);
+            return url.toString();
+          } catch (error) {
+            var hashIndex = endpoint.indexOf("#");
+            var base = hashIndex === -1 ? endpoint : endpoint.slice(0, hashIndex);
+            var hash = hashIndex === -1 ? "" : endpoint.slice(hashIndex);
+            var separator = base.indexOf("?") === -1 ? "?" : "&";
+
+            return base + separator + "authorization=" + encodeURIComponent(authorization) + hash;
+          }
+        }
+
         function redirectToInscricao(endpoint) {
           if (!endpoint) {
             return;
@@ -2175,17 +2194,11 @@
         if (button) {
           button.addEventListener("click", function (event) {
             var authorization = authorizationField ? authorizationField.value : "";
-            var endpoint = getInscricaoEndpoint();
+            var endpoint = appendAuthorizationParam(getInscricaoEndpoint(), authorization);
 
             if (!endpoint) {
               showPopup("Não foi possível identificar o endereço do formulário de inscrição.", { tone: "error" });
               return;
-            }
-
-            if (authorization) {
-              var encodedAuthorization = encodeURIComponent(authorization);
-              document.cookie = "token=" + encodedAuthorization + "; path=/";
-              document.cookie = "authorization=" + encodedAuthorization + "; path=/";
             }
 
             redirectToInscricao(endpoint);
