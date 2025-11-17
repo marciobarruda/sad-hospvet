@@ -2164,30 +2164,12 @@
           return endpointDefault;
         }
 
-        function submitInscricaoForm(authorization, endpoint) {
-          var formId = "inscricao-redirect-form";
-          var existingForm = document.getElementById(formId);
-          var form = existingForm || document.createElement("form");
-
-          form.id = formId;
-          form.method = "POST";
-          form.action = endpoint;
-          form.style.display = "none";
-
-          form.innerHTML = "";
-
-          var authInput = document.createElement("input");
-          authInput.type = "hidden";
-          authInput.name = "authorization";
-          authInput.value = authorization || "";
-
-          form.appendChild(authInput);
-
-          if (!existingForm) {
-            document.body.appendChild(form);
+        function redirectToInscricao(endpoint) {
+          if (!endpoint) {
+            return;
           }
 
-          form.submit();
+          window.location.href = endpoint;
         }
 
         if (button) {
@@ -2201,10 +2183,12 @@
             }
 
             if (authorization) {
-              document.cookie = "token=" + encodeURIComponent(authorization) + "; path=/";
+              var encodedAuthorization = encodeURIComponent(authorization);
+              document.cookie = "token=" + encodedAuthorization + "; path=/";
+              document.cookie = "authorization=" + encodedAuthorization + "; path=/";
             }
 
-            submitInscricaoForm(authorization, endpoint);
+            redirectToInscricao(endpoint);
           });
         }
 
