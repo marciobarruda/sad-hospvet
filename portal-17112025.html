@@ -1068,18 +1068,11 @@
           attentionCloseButtons.forEach(function (buttonEl) {
             buttonEl.addEventListener("click", closeAttentionModal);
           });
-
-          attentionModal.addEventListener("click", function (event) {
-            if (event.target === attentionModal) {
-              closeAttentionModal();
-            }
-          });
         }
 
         document.addEventListener("keydown", function (event) {
           if (event.key === "Escape") {
             hidePopup();
-            closeAttentionModal();
           }
         });
 
