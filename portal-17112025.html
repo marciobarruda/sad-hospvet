@@ -2554,16 +2554,24 @@
                   isSuccess = false;
                 }
 
-                if (!tone && isSuccess) {
-                  tone = "success";
-                }
+                  if (!tone && isSuccess) {
+                    tone = "success";
+                  }
 
-                showPopup(message, {
-                  data: typeof data === "string" ? null : data,
-                  tone: tone,
-                  onClose: isSuccess ? cleanupRecursoForm : null,
-                });
-              })
+                  var popupOptions = {
+                    data: typeof data === "string" ? null : data,
+                    tone: tone,
+                    onClose: isSuccess ? cleanupRecursoForm : null,
+                  };
+
+                  if (isSuccess) {
+                    message =
+                      "Recurso enviado com sucesso. Se desejar, aproveite a seção de atualização cadastral para manter seus dados atualizados!";
+                    popupOptions.appendReminder = false;
+                  }
+
+                  showPopup(message, popupOptions);
+                })
               .catch(function (error) {
                 console.error("Falha ao enviar recurso:", error);
                 showPopup("Não foi possível enviar o recurso. Tente novamente em instantes.", { tone: "error" });
