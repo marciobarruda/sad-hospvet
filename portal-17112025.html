@@ -541,7 +541,7 @@
                     </div>
                     <div class="mt-3 text-muted small">Selecione apenas os arquivos necessários para o seu recurso. Pelo menos um anexo deve ser informado.</div>
                   </details>
-                  <button class="btn btn-outline-primary mt-3" id="btn-enviar-recurso" type="button" data-endpoint="https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/d2d44182-1ae3-47db-ab77-4ece9878e6dd" disabled>Enviar recurso</button>
+                  <button class="btn btn-outline-primary mt-3" id="btn-enviar-recurso" type="button" data-endpoint="https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/bce13445-b1b5-anexarrecursos" disabled>Enviar recurso</button>
                 </div>
               </div>
             </article>
@@ -2404,40 +2404,28 @@
 
             var cpfField = document.getElementById("cpf");
 
-            Promise.all(
-              state.arquivos.map(function (item) {
-                return lerArquivoComoBase64(item.file).then(function (base64) {
-                  var input = item.input;
-                  var legenda = input ? input.getAttribute("data-legenda") : "";
-                  return {
-                    tipo: item.tipo,
-                    legenda: legenda || item.tipo,
-                    nomeOriginal: item.file.name,
-                    nomeComInscricao: state.numero + "_" + item.file.name,
-                    mime: item.file.type,
-                    tamanho: item.file.size,
-                    conteudoBase64: base64,
-                  };
-                });
-              })
-            )
-                .then(function (arquivosConvertidos) {
-                  var payload = {
-                    numeroInscricao: state.numero,
-                    cpf: cpfField ? cpfField.value : "",
-                    anexos: arquivosConvertidos,
-                    arquivos: arquivosConvertidos,
-                    acao: "recurso",
-                  };
+            var formData = new FormData();
+            formData.append("numeroInscricao", state.numero);
+            if (cpfField) {
+              formData.append("cpf", cpfField.value || "");
+            }
 
-                return fetch(recursoEndpoint, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(payload),
-                });
-              })
+            state.arquivos.forEach(function (item) {
+              var input = item.input;
+              var legenda = input ? input.getAttribute("data-legenda") : "";
+              var fieldName = item.tipo ? "arquivo_" + item.tipo : "arquivo";
+              var nomeComInscricao = state.numero + "_" + item.file.name;
+
+              formData.append(fieldName, item.file, nomeComInscricao);
+              if (legenda || item.tipo) {
+                formData.append(fieldName + "_legenda", legenda || item.tipo);
+              }
+            });
+
+            fetch(recursoEndpoint, {
+              method: "POST",
+              body: formData,
+            })
               .then(function (response) {
                 return response
                   .clone()
