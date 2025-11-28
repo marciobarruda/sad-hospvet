@@ -526,17 +526,44 @@
                     </div>
                     <div class="mt-3">
                       <label class="form-label" for="recurso-arquivo-curricular">Recurso sobre análise curricular</label>
-                      <input class="form-control" type="file" id="recurso-arquivo-curricular" name="arquivoRecursoCurricular" accept=".pdf,.jpg,.jpeg" data-tipo="analiseCurricular" data-legenda="Recurso sobre análise curricular" />
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="recurso-arquivo-curricular"
+                        name="arquivoRecursoCurricular"
+                        accept=".pdf,.jpg,.jpeg"
+                        data-tipo="analiseCurricular"
+                        data-legenda="Recurso sobre análise curricular"
+                        disabled
+                      />
                       <div class="form-text">Anexe o documento referente à etapa de análise curricular (formatos PDF, JPG ou JPEG, até 10&nbsp;MB).</div>
                     </div>
                     <div class="mt-3">
                       <label class="form-label" for="recurso-arquivo-laudo">Recurso de Laudo Médico para Pessoas com Deficiência</label>
-                      <input class="form-control" type="file" id="recurso-arquivo-laudo" name="arquivoRecursoLaudo" accept=".pdf,.jpg,.jpeg" data-tipo="laudoMedicoPcd" data-legenda="Recurso de Laudo Médico para Pessoas com Deficiência" />
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="recurso-arquivo-laudo"
+                        name="arquivoRecursoLaudo"
+                        accept=".pdf,.jpg,.jpeg"
+                        data-tipo="laudoMedicoPcd"
+                        data-legenda="Recurso de Laudo Médico para Pessoas com Deficiência"
+                        disabled
+                      />
                       <div class="form-text">Utilize este campo para anexar o laudo médico PcD (formatos PDF, JPG ou JPEG, até 10&nbsp;MB).</div>
                     </div>
                     <div class="mt-3">
                       <label class="form-label" for="recurso-arquivo-autodeclaracao">Recurso de Autodeclaração — Candidatos Negros</label>
-                      <input class="form-control" type="file" id="recurso-arquivo-autodeclaracao" name="arquivoRecursoAutodeclaracao" accept=".pdf,.jpg,.jpeg" data-tipo="autodeclaracaoNegros" data-legenda="Recurso de Autodeclaração — Candidatos Negros" />
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="recurso-arquivo-autodeclaracao"
+                        name="arquivoRecursoAutodeclaracao"
+                        accept=".pdf,.jpg,.jpeg"
+                        data-tipo="autodeclaracaoNegros"
+                        data-legenda="Recurso de Autodeclaração — Candidatos Negros"
+                        disabled
+                      />
                       <div class="form-text">Anexe o documento de autodeclaração para candidatos negros (formatos PDF, JPG ou JPEG, até 10&nbsp;MB).</div>
                     </div>
                     <div class="mt-3 text-muted small">Selecione apenas os arquivos necessários para o seu recurso. Pelo menos um anexo deve ser informado.</div>
@@ -805,6 +832,19 @@
         var recursoPrefix = "SSHVR2025";
         var recursoDigits = 6;
         var recursoPattern = /^SSHVR2025\d{6}$/;
+        var recursoAlgumInputHabilitado = false;
+        var recursoJanelas = {
+          analiseCurricular: [
+            { start: new Date("2025-12-08T00:00:00-03:00"), end: new Date("2025-12-09T23:59:59-03:00") },
+          ],
+          laudoMedicoPcd: [
+            { start: new Date("2025-12-01T00:00:00-03:00"), end: new Date("2025-12-02T23:59:59-03:00") },
+            { start: new Date("2025-12-17T00:00:00-03:00"), end: new Date("2025-12-18T23:59:59-03:00") },
+          ],
+          autodeclaracaoNegros: [
+            { start: new Date("2025-12-08T00:00:00-03:00"), end: new Date("2025-12-09T23:59:59-03:00") },
+          ],
+        };
         var modalBackdrop = document.getElementById("feedback-modal");
         var modalTitle = document.getElementById("feedback-modal-title");
         var modalMessage = document.getElementById("feedback-modal-message");
@@ -1755,6 +1795,42 @@
           return false;
         }
 
+        function getRecifeNow() {
+          return new Date(new Date().toLocaleString("en-US", { timeZone: "America/Recife" }));
+        }
+
+        function isWithinRange(now, range) {
+          if (!(now instanceof Date) || isNaN(now.getTime()) || !range || !(range.start instanceof Date) || !(range.end instanceof Date)) {
+            return false;
+          }
+          return now.getTime() >= range.start.getTime() && now.getTime() <= range.end.getTime();
+        }
+
+        function atualizarDisponibilidadeRecursos() {
+          var agoraRecife = getRecifeNow();
+          recursoAlgumInputHabilitado = false;
+
+          recursoArquivoInputs.forEach(function (entry) {
+            if (!entry.input) {
+              return;
+            }
+
+            var ranges = recursoJanelas[entry.tipo] || [];
+            var habilitado = ranges.some(function (range) {
+              return isWithinRange(agoraRecife, range);
+            });
+
+            entry.input.disabled = !habilitado;
+            if (!habilitado) {
+              entry.input.value = "";
+            } else {
+              recursoAlgumInputHabilitado = true;
+            }
+          });
+
+          atualizarFeedbackRecurso(false);
+        }
+
         function collectResourceValues() {
           var numero = "";
           if (recursoNumeroInput) {
@@ -1791,7 +1867,12 @@
             numeroValido: numeroValido,
             arquivos: arquivosSelecionados,
             arquivosInvalidos: arquivosInvalidos,
-            pronto: numeroValido && arquivosSelecionados.length > 0 && arquivosInvalidos.length === 0,
+            algumInputHabilitado: recursoAlgumInputHabilitado,
+            pronto:
+              numeroValido &&
+              recursoAlgumInputHabilitado &&
+              arquivosSelecionados.length > 0 &&
+              arquivosInvalidos.length === 0,
           };
         }
 
@@ -2019,9 +2100,12 @@
             input.addEventListener("blur", handleInputChange);
           });
 
+        atualizarDisponibilidadeRecursos();
         handleInputChange();
         atualizarFeedbackRecurso(false);
         carregarMinhasInscricoes();
+
+        setInterval(atualizarDisponibilidadeRecursos, 60 * 1000);
 
         function parseDate(raw) {
           if (!raw || typeof raw !== "string") {
