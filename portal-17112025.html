@@ -1901,7 +1901,8 @@
           });
 
           if (recursoButton) {
-            recursoButton.disabled = !state.pronto;
+            var isSending = recursoButton.dataset.sending === "true";
+            recursoButton.disabled = isSending || !state.algumInputHabilitado;
           }
 
           return state;
@@ -2483,6 +2484,7 @@
             }
 
             recursoButton.setAttribute("data-original-text", recursoButton.textContent || "Enviar recurso");
+            recursoButton.dataset.sending = "true";
             recursoButton.textContent = "Enviando...";
             recursoButton.disabled = true;
 
@@ -2569,7 +2571,7 @@
               .finally(function () {
                 var originalLabel = recursoButton.getAttribute("data-original-text") || "Enviar recurso";
                 recursoButton.textContent = originalLabel;
-                recursoButton.disabled = false;
+                delete recursoButton.dataset.sending;
                 atualizarFeedbackRecurso(false);
               });
           });
