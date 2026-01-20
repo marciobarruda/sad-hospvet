@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Secretaria de Administração - SAD — Seleção Simplificada Hospital Veterinário do Recife</title>
+    <link rel="icon"
+        href="https://statics.recife.pe.gov.br/images/dynamics/conecta/icons/favicon.png?w=32&h=32&fit=fill&border=2,transparent,shrink" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --brand-primary: #0053a4;
+            --brand-secondary: #003a73;
+            --brand-highlight: #00a3ff;
+            --surface: #f4f7fb;
+            --surface-strong: #ffffff;
+            --border-color: #d0d7e2;
+            --text-strong: #1b263b;
+            --text-muted: #5b6c8c;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--surface);
+            color: var(--text-strong);
+            min-height: 100vh;
+        }
+
+        header.site-header {
+            background: url("https://statics.recife.pe.gov.br/images/dynamics/automacao/header.png?w=3000") center/cover no-repeat;
+            color: #ffffff;
+            padding: 3.5rem 0 2.75rem;
+        }
+
+        header .lead {
+            color: rgba(255, 255, 255, 0.82);
+            max-width: 100%;
+            font-size: 1rem;
+            line-height: 1.65;
+            text-align: justify;
+        }
+
+        .badge-open {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            background-color: rgba(255, 255, 255, 0.14);
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, rgba(0, 83, 164, 0.09), rgba(0, 163, 255, 0.12));
+            color: var(--text-strong);
+            box-shadow: 0 10px 30px rgba(0, 45, 98, 0.08);
+        }
+
+        .user-greeting::before {
+            content: "👋";
+            font-size: 1.4rem;
+        }
+
+        .minhas-inscricoes-grid {
+            margin-top: 1rem;
+        }
+
+        .minhas-inscricao-card {
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            border: 1px solid rgba(0, 83, 164, 0.12);
+            border-radius: 4px;
+        }
+
+        .minhas-inscricao-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 45, 98, 0.12);
+        }
+
+        .minhas-inscricao-card.is-loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .minhas-inscricoes-placeholder {
+            padding: 1.25rem;
+            border-radius: 4px;
+            background: rgba(0, 83, 164, 0.05);
+            border: 1px dashed rgba(0, 83, 164, 0.2);
+            color: var(--text-muted);
+        }
+
+        .resumo-inscricao-list dt {
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .resumo-inscricao-list dd {
+            font-weight: 600;
+            color: var(--text-strong);
+        }
+
+        .resumo-inscricao-pre {
+            background: rgba(0, 83, 164, 0.06);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+
+        .card {
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rounded-4 {
+            border-radius: 4px !important;
+        }
+
+        .collapsible-form {
+            border: 1px solid rgba(0, 83, 164, 0.15);
+            border-radius: 4px;
+            background: rgba(0, 83, 164, 0.05);
+            padding: 1rem 1.25rem;
+        }
+
+        .collapsible-form summary {
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .collapsible-form summary::marker {
+            display: none;
+        }
+
+        .collapsible-form summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .collapsible-form summary::before {
+            content: "➕";
+            font-size: 0.9rem;
+            transition: transform 0.2s ease;
+        }
+
+        .collapsible-form[open] summary::before {
+            transform: rotate(45deg);
+        }
+
+        .collapsible-form .form-label {
+            font-weight: 600;
+            color: var(--text-strong);
+        }
+
+        .collapsible-form .form-text {
+            color: var(--text-muted);
+        }
+
+        .feedback-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(27, 38, 59, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 1050;
+        }
+
+        .feedback-modal-backdrop.active {
+            display: flex;
+        }
+
+        .feedback-modal {
+            background: #ffffff;
+            border-radius: 1rem;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+            padding: 1.75rem;
+            margin: 0 auto;
+        }
+
+        .feedback-modal.feedback-modal--wide {
+            max-width: 860px;
+        }
+
+        .feedback-modal-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-strong);
+        }
+
+        .feedback-modal-message {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-strong);
+            max-height: 60vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            word-break: break-word;
+        }
+
+        .feedback-modal-message> :last-child {
+            margin-bottom: 0;
+        }
+
+        .feedback-modal button {
+            border-radius: 999px;
+            padding-inline: 1.5rem;
+            font-weight: 600;
+        }
+
+        #publicacoes-list time {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--brand-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.02em;
+            color: var(--text-strong);
+        }
+
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 32px;
+            height: 3px;
+            border-radius: 999px;
+            background: var(--brand-highlight);
+        }
+
+        .card-programa {
+            border: 1px solid rgba(0, 83, 164, 0.08);
+            border-radius: 4px;
+            background: var(--surface-strong);
+            box-shadow: 0 16px 34px rgba(0, 45, 98, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+        }
+
+        .card-programa:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 38px rgba(0, 45, 98, 0.12);
+        }
+
+        .card-programa .card-header {
+            border-bottom: 1px solid rgba(0, 83, 164, 0.08);
+            background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%);
+            padding: 1.5rem 1.6rem 1.1rem;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .card-programa .card-body {
+            padding: 1.6rem 1.6rem 1.75rem;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .card-programa .badge {
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .card-programa ul {
+            padding-left: 1.25rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .card-programa .btn {
+            border-radius: 999px;
+            padding-inline: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .download-card {
+            border: 1px solid var(--border-color);
+            background: var(--surface-strong);
+            border-radius: 4px;
+            padding: 1.35rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-height: 170px;
+        }
+
+        .publicacoes-panel,
+        .updates-panel {
+            border-radius: 4px;
+        }
+
+        .download-card strong {
+            font-size: 1rem;
+            color: var(--text-strong);
+        }
+
+        .download-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .download-card a {
+            font-weight: 600;
+        }
+
+        #publicacoes-list li+li {
+            margin-top: 0.75rem;
+        }
+
+        .publicacoes-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .publicacoes-item-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .publicacoes-item-icon {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            flex-shrink: 0;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        .publicacoes-item-icon--pdf {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d32f2f' d='M6 2h7l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z'/%3E%3Cpath fill='%23ef5350' d='M13 2v5h5'/%3E%3Ctext x='12' y='17' text-anchor='middle' font-family='Arial, sans-serif' font-size='7' font-weight='700' fill='%23fff'%3EPDF%3C/text%3E%3C/svg%3E");
+        }
+
+        .publicacoes-item-icon--image {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3' y='4' width='18' height='16' rx='2' fill='%23215695'/%3E%3Crect x='4.5' y='5.5' width='15' height='13' rx='1.2' fill='%233968c8'/%3E%3Ccircle cx='9' cy='11' r='2.2' fill='%23fff59d'/%3E%3Cpath fill='%23c5cae9' d='M6 18l4.2-4.6 2.7 3.2 2.6-3L18 18z'/%3E%3C/svg%3E");
+        }
+
+        .publicacoes-item-icon--generic {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%233f51b5' d='M7 2h7l5 5v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z'/%3E%3Cpath fill='%235c6bc0' d='M14 2v5h5'/%3E%3Crect x='8.5' y='12' width='7' height='1.5' rx='.75' fill='%23c5cae9'/%3E%3Crect x='8.5' y='15' width='5' height='1.5' rx='.75' fill='%23c5cae9'/%3E%3C/svg%3E");
+        }
+
+        .publicacoes-item time {
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 576px) {
+            .publicacoes-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .publicacoes-item-link {
+                align-items: flex-start;
+            }
+        }
+
+        .updates-panel {
+            border-left: 3px solid var(--brand-highlight);
+            padding-left: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .updates-panel time {
+            font-size: 0.85rem;
+            color: var(--brand-secondary);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        footer {
+            color: var(--text-muted);
+            padding: 2.5rem 0 2rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            header.site-header {
+                padding: 2.5rem 0 2rem;
+            }
+
+            .badge-open {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="text-uppercase small fw-semibold mb-2 opacity-75">
+                        Secretaria de Administração — Prefeitura do Recife
+                    </div>
+                    <h1 class="display-5 fw-bold text-white mb-3">Cronograma de datas</h1>
+                    <p class="lead">Acompanhe as datas e etapas da Seleção Simplificada.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white py-3">
+                            <h2 class="h5 mb-0 fw-bold text-primary">Alimentar Cronograma</h2>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="cronogramaForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="inicio_inscricoes" class="form-label fw-semibold">Início de
+                                            Inscrições</label>
+                                        <input type="date" class="form-control" id="inicio_inscricoes"
+                                            name="inicio_inscricoes" value="{{ $json.inicio_inscricoes }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_inscricoes" class="form-label fw-semibold">Término de
+                                            Inscrições</label>
+                                        <input type="date" class="form-control" id="termino_inscricoes"
+                                            name="termino_inscricoes" value="{{ $json.termino_inscricoes }}" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inicio_impugnacao" class="form-label fw-semibold">Início de
+                                            Impugnação</label>
+                                        <input type="date" class="form-control" id="inicio_impugnacao"
+                                            name="inicio_impugnacao" value="{{ $json.inicio_impugnacao }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_impugnacao" class="form-label fw-semibold">Término de
+                                            Impugnação</label>
+                                        <input type="date" class="form-control" id="termino_impugnacao"
+                                            name="termino_impugnacao" value="{{ $json.termino_impugnacao }}" required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="publicacao_concorrencia" class="form-label fw-semibold">Publicação
+                                            da
+                                            Concorrência</label>
+                                        <input type="date" class="form-control" id="publicacao_concorrencia"
+                                            name="publicacao_concorrencia" value="{{ $json.publicacao_concorrencia }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="resultado_preliminar_pcd" class="form-label fw-semibold">Resultado
+                                            Preliminar
+                                            (PCD)</label>
+                                        <input type="date" class="form-control" id="resultado_preliminar_pcd"
+                                            name="resultado_preliminar_pcd" value="{{ $json.resultado_preliminar_pcd }}"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="resultado_definitivo_pcd" class="form-label fw-semibold">Resultado
+                                            Definitivo
+                                            PCD</label>
+                                        <input type="date" class="form-control" id="resultado_definitivo_pcd"
+                                            name="resultado_definitivo_pcd" value="{{ $json.resultado_definitivo_pcd }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inicio_recurso_pcd" class="form-label fw-semibold">Recurso Adm.
+                                            Resultado PCD
+                                            (Início)</label>
+                                        <input type="date" class="form-control" id="inicio_recurso_pcd"
+                                            name="inicio_recurso_pcd" value="{{ $json.inicio_recurso_pcd }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_recurso_pcd" class="form-label fw-semibold">Recurso Adm.
+                                            Resultado PCD
+                                            (Término)</label>
+                                        <input type="date" class="form-control" id="termino_recurso_pcd"
+                                            name="termino_recurso_pcd" value="{{ $json.termino_recurso_pcd }}" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="resultado_preliminar_analise_curricular"
+                                            class="form-label fw-semibold">Resultado
+                                            Preliminar Análise Curricular</label>
+                                        <input type="date" class="form-control"
+                                            id="resultado_preliminar_analise_curricular"
+                                            name="resultado_preliminar_analise_curricular"
+                                            value="{{ $json.resultado_preliminar_analise_curricular }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="resultado_preliminar_ppni" class="form-label fw-semibold">Resultado
+                                            Preliminar
+                                            (PPNI)</label>
+                                        <input type="date" class="form-control" id="resultado_preliminar_ppni"
+                                            name="resultado_preliminar_ppni"
+                                            value="{{ $json.resultado_preliminar_ppni }}" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inicio_recurso_ppni" class="form-label fw-semibold">Recurso PPNI
+                                            (Início)</label>
+                                        <input type="date" class="form-control" id="inicio_recurso_ppni"
+                                            name="inicio_recurso_ppni" value="{{ $json.inicio_recurso_ppni }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_recurso_ppni" class="form-label fw-semibold">Recurso PPNI
+                                            (Término)</label>
+                                        <input type="date" class="form-control" id="termino_recurso_ppni"
+                                            name="termino_recurso_ppni" value="{{ $json.termino_recurso_ppni }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inicio_recurso_avaliacao_curricular"
+                                            class="form-label fw-semibold">Recurso Avaliação
+                                            Curricular (Início)</label>
+                                        <input type="date" class="form-control" id="inicio_recurso_avaliacao_curricular"
+                                            name="inicio_recurso_avaliacao_curricular"
+                                            value="{{ $json.inicio_recurso_avaliacao_curricular }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_recurso_avaliacao_curricular"
+                                            class="form-label fw-semibold">Recurso Avaliação
+                                            Curricular (Término)</label>
+                                        <input type="date" class="form-control"
+                                            id="termino_recurso_avaliacao_curricular"
+                                            name="termino_recurso_avaliacao_curricular"
+                                            value="{{ $json.termino_recurso_avaliacao_curricular }}" required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="convocacao_pcd" class="form-label fw-semibold">Convocação
+                                            PCD</label>
+                                        <input type="date" class="form-control" id="convocacao_pcd"
+                                            name="convocacao_pcd" value="{{ $json.convocacao_pcd }}" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inicio_avaliacao_pcd" class="form-label fw-semibold">Avaliação PCD
+                                            (Início)</label>
+                                        <input type="date" class="form-control" id="inicio_avaliacao_pcd"
+                                            name="inicio_avaliacao_pcd" value="{{ $json.inicio_avaliacao_pcd }}"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_avaliacao_pcd" class="form-label fw-semibold">Avaliação PCD
+                                            (Término)</label>
+                                        <input type="date" class="form-control" id="termino_avaliacao_pcd"
+                                            name="termino_avaliacao_pcd" value="{{ $json.termino_avaliacao_pcd }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="publicacao_resultado_pcd" class="form-label fw-semibold">Publicação
+                                            do Resultado
+                                            PCD</label>
+                                        <input type="date" class="form-control" id="publicacao_resultado_pcd"
+                                            name="publicacao_resultado_pcd" value="{{ $json.publicacao_resultado_pcd }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inicio_recurso_resultado_preliminar_avaliacao_pcd"
+                                            class="form-label fw-semibold">Recurso Resultado Prelim. Avaliação PCD
+                                            (Início)</label>
+                                        <input type="date" class="form-control"
+                                            id="inicio_recurso_resultado_preliminar_avaliacao_pcd"
+                                            name="inicio_recurso_resultado_preliminar_avaliacao_pcd"
+                                            value="{{ $json.inicio_recurso_resultado_preliminar_avaliacao_pcd }}"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="termino_recurso_resultado_preliminar_avaliacao_pcd"
+                                            class="form-label fw-semibold">Recurso Resultado Prelim. Avaliação PCD
+                                            (Término)</label>
+                                        <input type="date" class="form-control"
+                                            id="termino_recurso_resultado_preliminar_avaliacao_pcd"
+                                            name="termino_recurso_resultado_preliminar_avaliacao_pcd"
+                                            value="{{ $json.termino_recurso_resultado_preliminar_avaliacao_pcd }}"
+                                            required>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="resultado_final" class="form-label fw-semibold">Resultado Final do
+                                            Concurso</label>
+                                        <input type="date" class="form-control" id="resultado_final"
+                                            name="resultado_final" value="{{ $json.resultado_final }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-4">
+                                    <button type="button" class="btn btn-primary btn-lg" id="submitBtn">Enviar
+                                        Dados</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('cronogramaForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.addEventListener('click', function () {
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando...';
+
+                fetch('https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/alimentarcronograma', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Dados enviados com sucesso!');
+                            form.reset();
+                        } else {
+                            alert('Erro ao enviar dados. Por favor, tente novamente.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro ao enviar dados. Verifique sua conexão.');
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Enviar Dados';
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>
