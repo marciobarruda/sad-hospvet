@@ -955,17 +955,6 @@
             <div class="section-block">
               <h3 class="section-title">Naturalidade e filiação</h3>
               <div class="row g-3 mb-1">
-                <div class="col-md-5 col-lg-6">
-                  <label for="naturalidade_cidade" class="form-label required">Naturalidade</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="naturalidade_cidade"
-                    name="naturalidade_cidade"
-                    value="{{ String($json.naturalidade ?? '').trim().toUpperCase() }}"
-                    required
-                  />
-                </div>
                 <div class="col-md-2 col-lg-3 col-xl-2">
                   <label for="naturalidade_uf" class="form-label required">UF</label>
                   <select
@@ -978,6 +967,19 @@
                     required
                   >
                     <option value="">Selecione...</option>
+                  </select>
+                </div>
+                <div class="col-md-5 col-lg-6">
+                  <label for="naturalidade_cidade" class="form-label required">Naturalidade</label>
+                  <select
+                    id="naturalidade_cidade"
+                    name="naturalidade_cidade"
+                    class="form-select"
+                    data-prefill="{{ String($json.naturalidade ?? '').trim() }}"
+                    required
+                    disabled
+                  >
+                    <option value="">Selecione a UF</option>
                   </select>
                 </div>
               </div>
@@ -1710,7 +1712,7 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🪪</div>
                     <p class="upload-title">Documento de identificação (frente)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1728,7 +1730,7 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🪪</div>
                     <p class="upload-title">Documento de identificação (verso)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1746,7 +1748,7 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🧾</div>
                     <p class="upload-title">CPF</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1764,7 +1766,7 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🏠</div>
                     <p class="upload-title">Comprovante de residência</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1782,7 +1784,7 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🗳️</div>
                     <p class="upload-title">Quitação eleitoral</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1824,7 +1826,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">⚖️</div>
                     <p class="upload-title">Certidão de atuação</p>
-                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Anexe em PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1841,7 +1843,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📜</div>
                     <p class="upload-title">Certidão (art. 440 do CPP)</p>
-                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Anexe em PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1864,7 +1866,7 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🎓</div>
                     <p class="upload-title">Comprovação da escolaridade</p>
-                    <p class="upload-instruction">Envie em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Envie em PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1882,14 +1884,22 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📁</div>
                     <p class="upload-title">Experiência / títulos / certificados</p>
-                    <p class="upload-instruction">Você pode anexar vários arquivos.</p>
+                    <p class="upload-instruction">
+                      Anexe apenas um arquivo em PDF, PNG, JPG ou JPEG.
+                      <a
+                        href="https://smallpdf.com/pt/juntar-pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Precisa juntar vários PDFs? Use esta ferramenta online.
+                      </a>
+                    </p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_curriculo"
                       name="doc_curriculo"
                       accept=".pdf,.jpg,.jpeg,.png"
-                      multiple
                       aria-label="Experiência, títulos ou certificados"
                     />
                     <label class="upload-button" for="doc_curriculo">Selecionar arquivo</label>
@@ -1906,7 +1916,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📝</div>
                     <p class="upload-title">Declaração de heteroidentificação</p>
-                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Anexe em PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1923,14 +1933,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🆔</div>
                     <p class="upload-title">Documento de identidade (frente/verso)</p>
-                    <p class="upload-instruction">Envie em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Envie um único arquivo em PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_id"
                       name="het_id"
                       accept=".pdf,.jpg,.jpeg,.png"
-                      multiple
                       aria-label="Documento de identidade (frente/verso)"
                     />
                     <label class="upload-button" for="het_id">Selecionar arquivo</label>
@@ -1941,7 +1950,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🤳</div>
                     <p class="upload-title">Foto de frente</p>
-                    <p class="upload-instruction">Apenas PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Apenas PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1958,7 +1967,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📸</div>
                     <p class="upload-title">Foto de perfil</p>
-                    <p class="upload-instruction">Apenas PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Apenas PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1975,7 +1984,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🎥</div>
                     <p class="upload-title">Vídeo (até 20s)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: MP4 ou MOV (até 20 segundos).</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -1998,7 +2007,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🩺</div>
                     <p class="upload-title">Laudo médico</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -2016,7 +2025,7 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📄</div>
                     <p class="upload-title">Declaração PCD (modelo do edital)</p>
-                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">Anexe em PDF, PNG, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
@@ -2034,14 +2043,22 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🧪</div>
                     <p class="upload-title">Exames complementares (opcional)</p>
-                    <p class="upload-instruction">Envie quantos arquivos precisar em PDF, JPG ou JPEG.</p>
+                    <p class="upload-instruction">
+                      Anexe apenas um arquivo em PDF, PNG, JPG ou JPEG.
+                      <a
+                        href="https://smallpdf.com/pt/juntar-pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Precisa juntar vários PDFs? Use esta ferramenta online.
+                      </a>
+                    </p>
                     <input
                       type="file"
                       class="upload-input"
                       id="pcd_exames"
                       name="pcd_exames"
                       accept=".pdf,.jpg,.jpeg,.png"
-                      multiple
                       aria-label="Exames complementares"
                     />
                     <label class="upload-button" for="pcd_exames">Selecionar arquivo</label>
@@ -2167,7 +2184,9 @@
       const newSubmissionButton = document.getElementById('newSubmissionButton');
       const nacionalidadeSelect = document.getElementById('nacionalidade');
       const naturalidadeUfSelect = document.getElementById('naturalidade_uf');
+      const naturalidadeCidadeSelect = document.getElementById('naturalidade_cidade');
       const naturalidadeUfLabel = document.querySelector('label[for="naturalidade_uf"]');
+      const naturalidadeCidadeLabel = document.querySelector('label[for="naturalidade_cidade"]');
       const ufSelects = Array.from(document.querySelectorAll('[data-uf-select]'));
       const generoSelect = document.getElementById('genero');
       const nivelSelect = document.getElementById('nivel');
@@ -2692,6 +2711,8 @@
             if (!group.length) return;
             const hasVisibleOption = group.some((radio) => ignoreVisibility || isElementVisible(radio));
             if (!hasVisibleOption) return;
+            const isRequiredGroup = group.some((radio) => radio.required);
+            if (!isRequiredGroup) return;
             const hasSelection = group.some((radio) => radio.checked);
             if (!hasSelection) {
               const representative = group.find((radio) => ignoreVisibility || isElementVisible(radio)) || field;
@@ -3208,18 +3229,115 @@
       };
 
       const updateNacionalidadeRequirement = () => {
-        if (!naturalidadeUfSelect) return;
+        if (!naturalidadeUfSelect && !naturalidadeCidadeSelect) return;
         const selected = (nacionalidadeSelect?.value || '').toUpperCase();
         const isBrasileira = !selected || selected === 'BRASILEIRA';
-        if (isBrasileira) {
-          naturalidadeUfSelect.setAttribute('required', '');
-        } else {
-          naturalidadeUfSelect.removeAttribute('required');
-          naturalidadeUfSelect.classList.remove('is-invalid');
+        if (naturalidadeUfSelect) {
+          if (isBrasileira) {
+            naturalidadeUfSelect.setAttribute('required', '');
+          } else {
+            naturalidadeUfSelect.removeAttribute('required');
+            naturalidadeUfSelect.classList.remove('is-invalid');
+          }
+        }
+        if (naturalidadeCidadeSelect) {
+          if (isBrasileira) {
+            naturalidadeCidadeSelect.setAttribute('required', '');
+          } else {
+            naturalidadeCidadeSelect.removeAttribute('required');
+            naturalidadeCidadeSelect.classList.remove('is-invalid');
+          }
         }
         if (naturalidadeUfLabel) {
           naturalidadeUfLabel.classList.toggle('required', isBrasileira);
         }
+        if (naturalidadeCidadeLabel) {
+          naturalidadeCidadeLabel.classList.toggle('required', isBrasileira);
+        }
+      };
+
+      const setNaturalidadeDisabled = (disabled, placeholder = 'Selecione a UF') => {
+        if (!naturalidadeCidadeSelect) return;
+        naturalidadeCidadeSelect.disabled = disabled;
+        if (disabled) {
+          const option = document.createElement('option');
+          option.value = '';
+          option.textContent = placeholder;
+          naturalidadeCidadeSelect.innerHTML = '';
+          naturalidadeCidadeSelect.appendChild(option);
+        }
+      };
+
+      const populateNaturalidadeOptions = (cities, prefillValue) => {
+        if (!naturalidadeCidadeSelect) return;
+        const fragment = document.createDocumentFragment();
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Selecione...';
+        fragment.appendChild(defaultOption);
+        cities.forEach((entry) => {
+          const label =
+            (typeof entry === 'string' ? entry : entry?.nome || entry?.name || entry?.cidade || entry?.label || entry?.title || '') ||
+            '';
+          const text = String(label).trim();
+          if (!text) return;
+          const option = document.createElement('option');
+          option.value = text;
+          option.textContent = text;
+          fragment.appendChild(option);
+        });
+        naturalidadeCidadeSelect.innerHTML = '';
+        naturalidadeCidadeSelect.appendChild(fragment);
+        const desiredValue = prefillValue || naturalidadeCidadeSelect.dataset.prefill || '';
+        if (desiredValue) {
+          const match = Array.from(naturalidadeCidadeSelect.options).find(
+            (option) => option.value.toUpperCase() === desiredValue.toUpperCase(),
+          );
+          if (match) {
+            naturalidadeCidadeSelect.value = match.value;
+          }
+        }
+      };
+
+      const fetchNaturalidadeCities = async (uf) => {
+        if (!naturalidadeCidadeSelect) return;
+        const sanitizedUf = String(uf || '').trim();
+        if (!sanitizedUf) {
+          setNaturalidadeDisabled(true);
+          return;
+        }
+        setNaturalidadeDisabled(true, 'Carregando...');
+        try {
+          const response = await fetch(
+            'https://webhook-n8n-dev-conectarecife.recife.pe.gov.br/webhook/listar-cidades',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ uf: sanitizedUf }),
+            },
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const data = await response.json();
+          const cities = Array.isArray(data)
+            ? data
+            : Array.isArray(data?.cidades)
+              ? data.cidades
+              : Array.isArray(data?.data)
+                ? data.data
+                : [];
+          populateNaturalidadeOptions(cities, naturalidadeCidadeSelect.dataset.prefill || '');
+          naturalidadeCidadeSelect.disabled = false;
+        } catch (error) {
+          console.error('Erro ao carregar cidades de naturalidade', error);
+          populateNaturalidadeOptions([]);
+          naturalidadeCidadeSelect.disabled = false;
+        }
+      };
+
+      const handleNaturalidadeUfChange = () => {
+        fetchNaturalidadeCities(naturalidadeUfSelect?.value || '');
       };
 
       const populateUfSelects = () => {
@@ -3854,6 +3972,9 @@
         if (nacionalidadeSelect) {
           nacionalidadeSelect.addEventListener('change', updateNacionalidadeRequirement);
         }
+        if (naturalidadeUfSelect) {
+          naturalidadeUfSelect.addEventListener('change', handleNaturalidadeUfChange);
+        }
         if (newSubmissionButton) {
           newSubmissionButton.addEventListener('click', () => window.location.reload());
         }
@@ -3872,6 +3993,7 @@
         filterCargoOptions();
         updateEspecialidadeOptions();
         selectPrefills();
+        handleNaturalidadeUfChange();
         void populateNacionalidades();
         radioPrefills();
         loadDraft();
