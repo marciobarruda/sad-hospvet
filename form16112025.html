@@ -68,7 +68,6 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, rgba(17, 82, 173, 0.72) 0%, rgba(11, 36, 71, 0.72) 100%);
         z-index: 0;
       }
 
@@ -89,6 +88,19 @@
         color: rgba(255, 255, 255, 0.82);
         max-width: 720px;
         margin: 0;
+      }
+
+      .countdown-status {
+        display: block;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .countdown-timer {
+        display: block;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        margin-top: 0.1rem;
       }
 
       .badge-open {
@@ -113,7 +125,6 @@
         position: relative;
         height: 240px;
         overflow: hidden;
-        background-color: #0b2447;
         background-image: url("https://statics.recife.pe.gov.br/images/dynamics/automacao/header.png?w=3000");
         background-size: cover;
         background-position: center;
@@ -769,8 +780,9 @@
       <div class="container hero-container">
         <span class="badge-open">Secretaria de Administração - SAD - Prefeitura do Recife</span>
         <h1 class="display-6 fw-semibold mt-3">Seleção Simplificada Hospital Veterinário do Recife</h1>
-        <p class="lead mt-2">
-          Inscrições abertas até 23:59:59 do dia 31 de outubro de 2025
+        <p class="lead mt-2" id="countdownContainer" aria-live="polite">
+          <span id="countdownStatus" class="countdown-status">Período de inscrição</span>
+          <span id="countdownTimer" class="countdown-timer">Carregando contagem regressiva...</span>
         </p>
       </div>
     </header>
@@ -1123,14 +1135,13 @@
               </div>
             </div>
           </div>
-          <div class="card-footer bg-transparent border-top-0 pt-0">
-            <div class="wizard-controls">
-              <button type="button" class="btn btn-outline-secondary" id="prevBtn0" disabled>Voltar</button>
-              <div class="spacer"></div>
-              <button type="button" class="btn btn-outline-secondary" data-action="save-draft">Salvar rascunho</button>
-              <button type="button" class="btn btn-primary" data-action="next">Avançar</button>
+            <div class="card-footer bg-transparent border-top-0 pt-0">
+              <div class="wizard-controls">
+                <button type="button" class="btn btn-outline-secondary" id="prevBtn0" disabled>Voltar</button>
+                <div class="spacer"></div>
+                <button type="button" class="btn btn-primary" data-action="next">Avançar</button>
+              </div>
             </div>
-          </div>
         </section>
         <section class="card step-card d-none" data-step-panel="1">
           <div class="card-header">
@@ -1284,7 +1295,6 @@
             <div class="wizard-controls">
               <button type="button" class="btn btn-outline-secondary" data-action="prev">Voltar</button>
               <div class="spacer"></div>
-              <button type="button" class="btn btn-outline-secondary" data-action="save-draft">Salvar rascunho</button>
               <button type="button" class="btn btn-primary" data-action="next">Avançar</button>
             </div>
           </div>
@@ -1608,7 +1618,6 @@
             <div class="wizard-controls">
               <button type="button" class="btn btn-outline-secondary" data-action="prev">Voltar</button>
               <div class="spacer"></div>
-              <button type="button" class="btn btn-outline-secondary" data-action="save-draft">Salvar rascunho</button>
               <button type="button" class="btn btn-primary" data-action="next">Avançar</button>
             </div>
           </div>
@@ -1701,13 +1710,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🪪</div>
                     <p class="upload-title">Documento de identificação (frente)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_id_frente"
                       name="doc_id_frente"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Documento de identificação (frente)"
                     />
@@ -1719,13 +1728,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🪪</div>
                     <p class="upload-title">Documento de identificação (verso)</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_id_verso"
                       name="doc_id_verso"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Documento de identificação (verso)"
                     />
@@ -1737,13 +1746,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🧾</div>
                     <p class="upload-title">CPF</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_cpf"
                       name="doc_cpf"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="CPF"
                     />
@@ -1755,13 +1764,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🏠</div>
                     <p class="upload-title">Comprovante de residência</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_residencia"
                       name="doc_residencia"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Comprovante de residência"
                     />
@@ -1773,13 +1782,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🗳️</div>
                     <p class="upload-title">Quitação eleitoral</p>
-                    <p class="upload-instruction">Formatos aceitos: PDF ou imagem.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_quitacao_eleitoral"
                       name="doc_quitacao_eleitoral"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Quitação eleitoral"
                     />
@@ -1797,7 +1806,7 @@
                       class="upload-input"
                       id="doc_militar"
                       name="doc_militar"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       data-force-required="true"
                       aria-label="Quitação do serviço militar"
                     />
@@ -1815,13 +1824,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">⚖️</div>
                     <p class="upload-title">Certidão de atuação</p>
-                    <p class="upload-instruction">Anexe em PDF ou imagem.</p>
+                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_jurado"
                       name="doc_jurado"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Certidão de atuação"
                     />
                     <label class="upload-button" for="doc_jurado">Selecionar arquivo</label>
@@ -1832,13 +1841,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📜</div>
                     <p class="upload-title">Certidão (art. 440 do CPP)</p>
-                    <p class="upload-instruction">Anexe em PDF ou imagem.</p>
+                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_jurado_440"
                       name="doc_jurado_440"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Certidão (art. 440 do CPP)"
                     />
                     <label class="upload-button" for="doc_jurado_440">Selecionar arquivo</label>
@@ -1855,13 +1864,13 @@
                   <div class="upload-card required" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🎓</div>
                     <p class="upload-title">Comprovação da escolaridade</p>
-                    <p class="upload-instruction">Envie em PDF ou imagem.</p>
+                    <p class="upload-instruction">Envie em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="doc_escolaridade"
                       name="doc_escolaridade"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       required
                       aria-label="Comprovação da escolaridade"
                     />
@@ -1879,7 +1888,7 @@
                       class="upload-input"
                       id="doc_curriculo"
                       name="doc_curriculo"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       multiple
                       aria-label="Experiência, títulos ou certificados"
                     />
@@ -1897,13 +1906,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📝</div>
                     <p class="upload-title">Declaração de heteroidentificação</p>
-                    <p class="upload-instruction">Anexe em PDF ou imagem.</p>
+                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_declaracao"
                       name="het_declaracao"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Declaração de heteroidentificação"
                     />
                     <label class="upload-button" for="het_declaracao">Selecionar arquivo</label>
@@ -1914,13 +1923,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🆔</div>
                     <p class="upload-title">Documento de identidade (frente/verso)</p>
-                    <p class="upload-instruction">Envie em PDF ou imagem.</p>
+                    <p class="upload-instruction">Envie em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_id"
                       name="het_id"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       multiple
                       aria-label="Documento de identidade (frente/verso)"
                     />
@@ -1932,13 +1941,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🤳</div>
                     <p class="upload-title">Foto de frente</p>
-                    <p class="upload-instruction">Apenas imagens.</p>
+                    <p class="upload-instruction">Apenas PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_frente"
                       name="het_frente"
-                      accept="image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Foto de frente"
                     />
                     <label class="upload-button" for="het_frente">Selecionar arquivo</label>
@@ -1949,13 +1958,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📸</div>
                     <p class="upload-title">Foto de perfil</p>
-                    <p class="upload-instruction">Apenas imagens.</p>
+                    <p class="upload-instruction">Apenas PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_perfil"
                       name="het_perfil"
-                      accept="image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Foto de perfil"
                     />
                     <label class="upload-button" for="het_perfil">Selecionar arquivo</label>
@@ -1966,13 +1975,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🎥</div>
                     <p class="upload-title">Vídeo (até 20s)</p>
-                    <p class="upload-instruction">Formatos: MP4 ou Quicktime.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="het_video"
                       name="het_video"
-                      accept="video/mp4,video/quicktime"
+                      accept=".pdf,.jpg,.jpeg"
                       aria-label="Vídeo (até 20 segundos)"
                     />
                     <label class="upload-button" for="het_video">Selecionar arquivo</label>
@@ -1989,13 +1998,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🩺</div>
                     <p class="upload-title">Laudo médico</p>
-                    <p class="upload-instruction">Formatos: PDF, PNG ou JPG.</p>
+                    <p class="upload-instruction">Formatos aceitos: PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="pcd_laudo"
                       name="pcd_laudo"
-                      accept=".pdf,.png,.jpeg,.jpg,.gif"
+                      accept=".pdf,.jpg,.jpeg"
                       data-force-required="true"
                       aria-label="Laudo médico"
                     />
@@ -2007,13 +2016,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">📄</div>
                     <p class="upload-title">Declaração PCD (modelo do edital)</p>
-                    <p class="upload-instruction">Anexe em PDF ou imagem.</p>
+                    <p class="upload-instruction">Anexe em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="pcd_declaracao"
                       name="pcd_declaracao"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       data-force-required="true"
                       aria-label="Declaração PCD (modelo do edital)"
                     />
@@ -2025,13 +2034,13 @@
                   <div class="upload-card" data-upload-card>
                     <div class="upload-emoji" aria-hidden="true">🧪</div>
                     <p class="upload-title">Exames complementares (opcional)</p>
-                    <p class="upload-instruction">Envie quantos arquivos precisar.</p>
+                    <p class="upload-instruction">Envie quantos arquivos precisar em PDF, JPG ou JPEG.</p>
                     <input
                       type="file"
                       class="upload-input"
                       id="pcd_exames"
                       name="pcd_exames"
-                      accept=".pdf,image/*"
+                      accept=".pdf,.jpg,.jpeg"
                       multiple
                       aria-label="Exames complementares"
                     />
@@ -2047,7 +2056,6 @@
             <div class="wizard-controls">
               <button type="button" class="btn btn-outline-secondary" data-action="prev">Voltar</button>
               <div class="spacer"></div>
-              <button type="button" class="btn btn-outline-secondary" data-action="save-draft">Salvar rascunho</button>
               <button type="button" class="btn btn-primary" data-action="next">Avançar</button>
             </div>
           </div>
@@ -2086,8 +2094,15 @@
             <div class="wizard-controls">
               <button type="button" class="btn btn-outline-secondary" data-action="prev">Voltar</button>
               <div class="spacer"></div>
-              <button type="button" class="btn btn-outline-secondary" data-action="save-draft">Salvar rascunho</button>
-              <button type="submit" class="btn btn-primary">Enviar inscrição</button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                aria-disabled="true"
+                disabled
+                title="Envio disponível somente entre 17/11/2025 00:00 e 26/11/2025 23:59:59."
+              >
+                Enviar inscrição
+              </button>
             </div>
           </div>
         </section>
@@ -2160,6 +2175,73 @@
       const cargosInscritosInput = document.getElementById('cargosInscritos');
       const especialidadeGroup = document.getElementById('especialidadeGroup');
       const especialidadeSelect = document.getElementById('especialidade');
+      const countdownStatus = document.getElementById('countdownStatus');
+      const countdownTimer = document.getElementById('countdownTimer');
+      const submitButton = form?.querySelector('button[type="submit"]');
+      const REGISTRATION_START = new Date('2025-11-17T00:00:00-03:00');
+      const REGISTRATION_END = new Date('2025-11-26T23:59:59-03:00');
+      let countdownInterval;
+      let hasSubmitted = false;
+
+      const formatRemainingTime = (remainingMs) => {
+        const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000));
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const parts = [];
+        if (days > 0) {
+          parts.push(`${days}d`);
+        }
+        parts.push(hours.toString().padStart(2, '0') + 'h');
+        parts.push(minutes.toString().padStart(2, '0') + 'm');
+        parts.push(seconds.toString().padStart(2, '0') + 's');
+
+        return parts.join(' ');
+      };
+
+      const updateSubmissionAvailability = (now) => {
+        if (!submitButton || hasSubmitted) return;
+        const isOpen = now >= REGISTRATION_START && now <= REGISTRATION_END;
+        submitButton.disabled = !isOpen;
+        submitButton.ariaDisabled = (!isOpen).toString();
+        submitButton.title = isOpen
+          ? ''
+          : 'Envio disponível somente entre 17/11/2025 00:00 e 26/11/2025 23:59:59.';
+      };
+
+      const updateCountdownTimer = () => {
+        if (!countdownStatus || !countdownTimer) return;
+
+        const now = new Date();
+
+        if (now < REGISTRATION_START) {
+          countdownStatus.textContent = '⏳ Inscrições abrem em:';
+          countdownTimer.textContent = `🗓️ ${formatRemainingTime(REGISTRATION_START - now)}`;
+          updateSubmissionAvailability(now);
+          return;
+        }
+
+        if (now <= REGISTRATION_END) {
+          countdownStatus.textContent = '🚀 Inscrições abertas! Encerra em:';
+          countdownTimer.textContent = `⏱️ ${formatRemainingTime(REGISTRATION_END - now)}`;
+          updateSubmissionAvailability(now);
+          return;
+        }
+
+        countdownStatus.textContent = '🔒 Período de inscrições encerrado.';
+        countdownTimer.textContent = '⏹️ Prazo finalizado';
+        updateSubmissionAvailability(now);
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+        }
+      };
+
+      const startCountdown = () => {
+        updateCountdownTimer();
+        countdownInterval = window.setInterval(updateCountdownTimer, 1000);
+      };
       const especialidadeEntries = [
         {
           cargo: 'Analista em Saúde Animal – Veterinário 40h',
@@ -3717,77 +3799,99 @@
         } catch (error) {
           console.error('Erro ao enviar inscrição', error);
         }
-        const submitButton = form.querySelector('button[type="submit"]');
         if (submitButton) {
           submitButton.disabled = true;
         }
+        hasSubmitted = true;
         showSuccessFeedback();
       });
 
       if (nivelSelect) {
         nivelSelect.addEventListener('change', filterCargoOptions);
       }
-      if (cargoSelect) {
-        cargoSelect.addEventListener('change', updateEspecialidadeOptions);
-      }
-      if (especialidadeSelect) {
-        especialidadeSelect.addEventListener('change', () => {
-          especialidadeSelect.dataset.currentValue = especialidadeSelect.value || '';
-        });
-      }
-      document.getElementById('genero').addEventListener('change', updateGeneroOutro);
-      document.getElementById('sexo').addEventListener('change', updateMilitar);
-      document.querySelectorAll('input[name="jurado_funcao"]').forEach((input) => input.addEventListener('change', updateJurado));
-      document.querySelectorAll('input[name="vinculo_publico_opcao"]').forEach((input) => input.addEventListener('change', updateVinculo));
-      document.getElementById('is_pcd').addEventListener('change', updatePCD);
-      document.querySelectorAll('input[name="condicao_especial"]').forEach((input) => input.addEventListener('change', updateNecessidade));
-      document.getElementById('cotasPPNI').addEventListener('change', updatePPNI);
-      document.getElementById('email').addEventListener('input', validateEmailsMatch);
-      document.getElementById('email_confirm').addEventListener('input', validateEmailsMatch);
-      document.getElementById('email').addEventListener('blur', () => {
-        if (document.getElementById('email_confirm')?.value) {
-          validateEmailsMatch(true);
-        }
-      });
-      document.getElementById('email_confirm').addEventListener('blur', () => validateEmailsMatch(true));
-      if (nacionalidadeSelect) {
-        nacionalidadeSelect.addEventListener('change', updateNacionalidadeRequirement);
-      }
-      if (newSubmissionButton) {
-        newSubmissionButton.addEventListener('click', () => window.location.reload());
-      }
-      document.querySelectorAll('.upload-input').forEach((input) => {
-        updateUploadIndicator(input);
-        input.addEventListener('change', () => updateUploadIndicator(input));
-      });
-      if (cepInput) {
-        cepInput.addEventListener('input', handleCepInput);
-      }
+      startCountdown();
 
-      applyLowercaseToEmails();
-      applyUppercaseTransform();
-      enforceNumericOnly();
-      populateUfSelects();
-      filterCargoOptions();
-      updateEspecialidadeOptions();
-      selectPrefills();
-      void populateNacionalidades();
-      radioPrefills();
-      loadDraft();
-      updateEspecialidadeOptions();
-      updateGeneroOptions();
-      updateGeneroOutro();
-      updateMilitar();
-      updateJurado();
-      updateVinculo();
-      updatePCD();
-      requestAnimationFrame(() => updatePCD());
-      updateNecessidade();
-      updatePPNI();
-      updateNacionalidadeRequirement();
-      handleCepInput();
-      validateEmailsMatch();
-      showStep(0);
-    </script>   
+      try {
+        if (cargoSelect) {
+          cargoSelect.addEventListener('change', updateEspecialidadeOptions);
+        }
+        if (especialidadeSelect) {
+          especialidadeSelect.addEventListener('change', () => {
+            especialidadeSelect.dataset.currentValue = especialidadeSelect.value || '';
+          });
+        }
+        const generoInput = document.getElementById('genero');
+        const sexoInput = document.getElementById('sexo');
+        const pcdInput = document.getElementById('is_pcd');
+        if (generoInput) generoInput.addEventListener('change', updateGeneroOutro);
+        if (sexoInput) sexoInput.addEventListener('change', updateMilitar);
+        if (pcdInput) pcdInput.addEventListener('change', updatePCD);
+        document
+          .querySelectorAll('input[name="jurado_funcao"]')
+          .forEach((input) => input.addEventListener('change', updateJurado));
+        document
+          .querySelectorAll('input[name="vinculo_publico_opcao"]')
+          .forEach((input) => input.addEventListener('change', updateVinculo));
+        document
+          .querySelectorAll('input[name="condicao_especial"]')
+          .forEach((input) => input.addEventListener('change', updateNecessidade));
+        const cotasSelect = document.getElementById('cotasPPNI');
+        if (cotasSelect) cotasSelect.addEventListener('change', updatePPNI);
+        const emailInput = document.getElementById('email');
+        const emailConfirmInput = document.getElementById('email_confirm');
+        if (emailInput) emailInput.addEventListener('input', validateEmailsMatch);
+        if (emailConfirmInput) emailConfirmInput.addEventListener('input', validateEmailsMatch);
+        if (emailInput) {
+          emailInput.addEventListener('blur', () => {
+            if (emailConfirmInput?.value) {
+              validateEmailsMatch(true);
+            }
+          });
+        }
+        if (emailConfirmInput) {
+          emailConfirmInput.addEventListener('blur', () => validateEmailsMatch(true));
+        }
+        if (nacionalidadeSelect) {
+          nacionalidadeSelect.addEventListener('change', updateNacionalidadeRequirement);
+        }
+        if (newSubmissionButton) {
+          newSubmissionButton.addEventListener('click', () => window.location.reload());
+        }
+        document.querySelectorAll('.upload-input').forEach((input) => {
+          updateUploadIndicator(input);
+          input.addEventListener('change', () => updateUploadIndicator(input));
+        });
+        if (cepInput) {
+          cepInput.addEventListener('input', handleCepInput);
+        }
+
+        applyLowercaseToEmails();
+        applyUppercaseTransform();
+        enforceNumericOnly();
+        populateUfSelects();
+        filterCargoOptions();
+        updateEspecialidadeOptions();
+        selectPrefills();
+        void populateNacionalidades();
+        radioPrefills();
+        loadDraft();
+        updateEspecialidadeOptions();
+        updateGeneroOptions();
+        updateGeneroOutro();
+        updateMilitar();
+        updateJurado();
+        updateVinculo();
+        updatePCD();
+        requestAnimationFrame(() => updatePCD());
+        updateNecessidade();
+        updatePPNI();
+        updateNacionalidadeRequirement();
+        handleCepInput();
+        validateEmailsMatch();
+        showStep(0);
+      } catch (error) {
+        console.error('Erro ao inicializar o formulário', error);
+      }
+    </script>
   </body>
 </html>
